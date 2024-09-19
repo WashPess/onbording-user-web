@@ -1,0 +1,18 @@
+aside {
+	text-align: center;
+}
+
+.list-group li {
+	border-bottom: dashed 1px #DDD;
+}
+
+.letter-icon {
+  line-height: 0;
+}
+
+li a:hover,
+li a:focus,
+li a:active  {
+	color: rgb(0, 47, 255) !important;
+	transition: all .2s ease-in-out;
+}

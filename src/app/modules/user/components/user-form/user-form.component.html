@@ -1,0 +1,135 @@
+<form [formGroup]="form" class="form row p-0 m-0">
+
+  <div class="col-4 mb-3">
+    <label class="form-label">Name <span class="text-danger">*</span></label>
+  </div>
+
+  <div class="col-8 mb-3 d-flex justify-content-between gap-2">
+    <div class="flex-fill">
+      <input class="form-control w-100" type="text" placeholder="Max" formControlName="firstName" name="firstname">
+    </div>
+    <div class="flex-fill">
+      <input class="form-control" type="text" placeholder="Smith" formControlName="lastName" name="lastName">
+    </div>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">Company <span class="text-danger">*</span></label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <input class="form-control" type="text" placeholder="Kenthemes" formControlName="company" name="company">
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">
+      Contact Phone
+      <span class="text-danger">*</span>
+      <span class="ms-1" ngbTooltip="Phone number be must active"><i class="bi text-default fs-8 bi-exclamation-circle-fill"></i></span>
+    </label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <input class="form-control" type="tel" placeholder="Phone number" formControlName="contactPhone" name="contactPhone">
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">Company Site</label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <input class="form-control" type="text" placeholder="kenthemes.com" formControlName="companySite" name="companySite">
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">
+      Country
+      <span class="text-danger">*</span>
+      <span class="ms-1" ngbTooltip="Country of origination"><i class="bi text-default fs-8 bi-exclamation-circle-fill"></i></span>
+    </label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <select class="form-select" aria-label="Default select example" formControlName="country" name="country">
+      <option selected disabled>Selecione seu país</option>
+      <option [value]="country.code" *ngFor="let country of countries">{{country.name}}</option>
+    </select>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">
+      Language
+      <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <select class="form-select" aria-label="Default select example" formControlName="language" name="language">
+      <option selected disabled>Selecione seu idioma</option>
+      <option *ngFor="let language of languages" [value]="language.acronym">{{language.name}}</option>
+    </select>
+    <div id="emailHelp" class="form-text text-muted">Please select a preferred language, including date, time, and number formatting.</div>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">
+      Time Zone
+      <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <select class="form-select" aria-label="Default select example" formControlName="timeZone" name="timeZone">
+      <option selected disabled>Select timezone</option>
+      <option value="PT-BR">GTM-000</option>
+      <option value="EN">GTM-001</option>
+      <option value="ES">GTM-002</option>
+    </select>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">
+      Currency
+      <span class="text-danger">*</span>
+    </label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <select class="form-select" aria-label="Default select example" formControlName="currency" name="currency">
+      <option selected disabled>Select Currency</option>
+      <option value="BRL">Real</option>
+      <option value="EN">Dollar</option>
+      <option value="ES">Euro</option>
+    </select>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">Communication<span class="text-danger">*</span></label>
+  </div>
+
+  <div class="col-8 mb-3 d-flex justify-content-start gap-5">
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="email" name="email">
+      <label class="form-check-label" for="flexCheckDefault">Email</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" formControlName="telefone" name="telefone">
+      <label class="form-check-label" for="flexCheckChecked">Telefone</label>
+    </div>
+  </div>
+
+  <div class="col-4 mb-3">
+    <label class="form-label">Allow Marketing</label>
+  </div>
+
+  <div class="col-8 mb-3">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" formControlName="allowMarketing" name="allowMarketing">
+    </div>
+  </div>
+
+  <button (click)="print()">print</button>
+
+</form>

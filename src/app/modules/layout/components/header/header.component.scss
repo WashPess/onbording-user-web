@@ -1,0 +1,18 @@
+
+ul {
+	padding: 0 8px;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	gap: 16px;
+}
+
+li {
+	display: inline-block;
+	padding: 16px 28px;
+}
+
+li:hover {
+	border-radius: 8px;
+	background-color: rgba(255,255,255, 1);
+}
