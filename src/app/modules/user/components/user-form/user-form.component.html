@@ -81,9 +81,7 @@
   <div class="col-8 mb-3">
     <select class="form-select" aria-label="Default select example" formControlName="timeZone" name="timeZone">
       <option selected disabled>Select timezone</option>
-      <option value="PT-BR">GTM-000</option>
-      <option value="EN">GTM-001</option>
-      <option value="ES">GTM-002</option>
+      <option [value]="timezone.code" *ngFor="let timezone of timezones">{{timezone.name}}</option>
     </select>
   </div>
 
@@ -97,9 +95,8 @@
   <div class="col-8 mb-3">
     <select class="form-select" aria-label="Default select example" formControlName="currency" name="currency">
       <option selected disabled>Select Currency</option>
-      <option value="BRL">Real</option>
-      <option value="EN">Dollar</option>
-      <option value="ES">Euro</option>
+      <option [value]="currency.code" *ngFor="let currency of currency">{{currency.name}}</option>
+
     </select>
   </div>
 
@@ -129,6 +126,65 @@
       <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" formControlName="allowMarketing" name="allowMarketing">
     </div>
   </div>
+
+  <div class="col-12 mb-3 pt-4">
+    <h2>Monte se Gênero</h2>
+    <form [formGroup]="formGender" class="row border rounded m-0 p-4">
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Sexo</label>
+        <select class="form-select" aria-label="Default select example" formControlName="sex" name="sex">
+          <option selected disabled>Selecione seu sexo</option>
+          <option [value]="sex.code" *ngFor="let sex of sexes">{{sex.name}}</option>
+        </select>
+      </div>
+
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Gênero</label>
+        <select class="form-select" aria-label="Default select example" formControlName="gender" name="gender">
+          <option selected disabled>Selecione seu Gênero</option>
+          <option [value]="gender.code" *ngFor="let gender of genders">{{gender.name}}</option>
+        </select>
+      </div>
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Identidade de Gênero</label>
+        <select class="form-select" aria-label="Default select example" formControlName="genderIdentity" name="genderIdentity">
+          <option selected disabled>Selecione sua Identidade de Gênero</option>
+          <option [value]="genderIdentity.code" *ngFor="let genderIdentity of gendersIdentity">{{genderIdentity.name}}</option>
+        </select>
+      </div>
+
+      <div class="col-6 mb-3">
+        <label class="form-label">Orientação Sexual</label>
+        <select class="form-select" aria-label="Default select example" formControlName="sexOrientation" name="sexOrientation">
+          <option selected disabled>Selecione sua Orientação Sexual</option>
+          <option [value]="sexOrientation.code" *ngFor="let sexOrientation of sexesOrientation">{{sexOrientation.name}}</option>
+        </select>
+      </div>
+
+      <div class="col-6 mb-3">
+        <label class="form-label">Expressão de Gênero</label>
+        <select class="form-select" aria-label="Default select example" formControlName="expressionGender" name="expressionGender">
+          <option selected disabled>Selecione sua expressão de Gênero</option>
+          <option [value]="expressionGender.code" *ngFor="let expressionGender of expressionsGender">{{expressionGender.name}}</option>
+        </select>
+      </div>
+
+      <div class="col-12 mb-3">
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-success" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+
+
 
   <button (click)="print()">print</button>
 

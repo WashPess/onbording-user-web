@@ -1,0 +1,17 @@
+{
+  "eslint.validate": [
+    "javascript"
+  ],
+  "eslint.codeActionsOnSave.rules": [
+    "*semi*",
+    "@typescript-eslint/semi"
+  ],
+  "indent": [
+    "error", 2
+  ],
+  "rules": {
+    "indent": [2, "tab"],
+    "no-tabs": 0
+  }
+}
+
