@@ -7,6 +7,9 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./user-form.component.scss'],
 })
 export class UserFormComponent implements OnInit {
+
+  public percent = 0; // percentual da barra de progresso
+
   public countries = [
     { name: 'Brasil', code: 'BR' },
     { name: 'Argentina', code: 'AG' },
@@ -52,7 +55,7 @@ export class UserFormComponent implements OnInit {
     { code: "AEST", name: "Australian Eastern Standard Time" },
   ];
 
-  public currency = [
+  public currencies = [
     { code: "USD", name: "United States Dollar" },
     { code: "EUR", name: "Euro" },
     { code: "JPY", name: "Japanese Yen" },
@@ -91,6 +94,7 @@ export class UserFormComponent implements OnInit {
     { code: "cisgenero", name: "Cisgênero"},
     { code: "transgenero", name: "Transgênero"},
     { code: "nao_binario", name: "Não-binário"},
+    { code: "boyceta", name: "Boyceta"},
     { code: "NA", name: "Nenhuma das Alternativas" },
   ]
 
@@ -101,7 +105,6 @@ export class UserFormComponent implements OnInit {
     { code: "assexual", name: "Assexual"},
     { code: "bissexual", name: "Bissexual"},
     { code: "intersexual", name: "Intersexual"},
-    { code: "boyceta", name: "Boyceta"},
     { code: "NA", name: "Nenhuma das Alternativas" },
   ]
 
@@ -134,12 +137,60 @@ export class UserFormComponent implements OnInit {
     expressionGender: new FormControl(null, []),
   })
 
+
+  constructor() {}
+
   ngOnInit() {
     this.changeCountry();
+    this.controlProgressBar();
   }
 
   public print() {
     console.log('FIRSTNAME: ', this.form?.value);
+  }
+
+  private controlProgressBar() {
+
+    let sexWasFilled = false;
+    this.formGender.get('sex')?.valueChanges
+    .subscribe((value: any)=> sexWasFilled = this.controlPercent(value, sexWasFilled));
+
+    let genderWasFilled = false;
+    this.formGender.get('gender')?.valueChanges
+    .subscribe((value: any)=> genderWasFilled = this.controlPercent(value, genderWasFilled));
+
+    let genderIdentityWasFilled = false;
+    this.formGender.get('genderIdentity')?.valueChanges
+    .subscribe((value: any)=> genderIdentityWasFilled = this.controlPercent(value, genderIdentityWasFilled));
+
+    let sexOrientationIdentityWasFilled = false;
+    this.formGender.get('sexOrientation')?.valueChanges
+    .subscribe((value: any)=> sexOrientationIdentityWasFilled = this.controlPercent(value, sexOrientationIdentityWasFilled));
+
+    let expressionGenderWasFilled = false;
+    this.formGender.get('expressionGender')?.valueChanges
+    .subscribe((value: any)=> expressionGenderWasFilled = this.controlPercent(value, expressionGenderWasFilled));
+
+  };
+
+  private controlPercent(value: any, wasFilled: boolean) {
+    const step = 20;
+    if(!value) {
+      this.percent = this.percent - step;
+      wasFilled = false;
+
+      if(this.percent < 0) {
+        this.percent = 0;
+      }
+      return wasFilled;
+    }
+
+    if(wasFilled === false) {
+      wasFilled = true;
+      this.percent = this.percent + step;
+    }
+
+    return wasFilled;
   }
 
   // escuta alteraçoes em country
@@ -159,4 +210,6 @@ export class UserFormComponent implements OnInit {
       }
     });
   }
+
+
 }
