@@ -160,6 +160,13 @@
           <option selected disabled>Selecione sua Orientação Sexual</option>
           <option [value]="sexOrientation.code" *ngFor="let sexOrientation of sexesOrientation">{{sexOrientation.name}}</option>
         </select>
+
+        <ng-container *ngIf="loadingSexesOrientation$ | async">
+          <div class="spinner-grow spinner-grow-sm" role="status" style="position: relative !important; top: -20px !important;">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </ng-container>
+
       </div>
 
       <div class="col-6 mb-3">

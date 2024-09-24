@@ -1,12 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, of, Subscription, tap } from 'rxjs';
+
+
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, OnDestroy {
+
+  private unsubscriptions$: Subscription[] = <Subscription[]>[];
+  public loadingSexesOrientation$: Observable<boolean> = of(false);
 
   public percent = 0; // percentual da barra de progresso
 
@@ -98,15 +105,7 @@ export class UserFormComponent implements OnInit {
     { code: "NA", name: "Nenhuma das Alternativas" },
   ]
 
-  public sexesOrientation = [
-    { code: "heterossexual", name: "Heterossexual"},
-    { code: "homossexual", name: "Homossexual"},
-    { code: "pansexual", name: "Pansexual"},
-    { code: "assexual", name: "Assexual"},
-    { code: "bissexual", name: "Bissexual"},
-    { code: "intersexual", name: "Intersexual"},
-    { code: "NA", name: "Nenhuma das Alternativas" },
-  ]
+  public sexesOrientation: any[] = [];
 
   public expressionsGender = [
     { code: "drag_queen", name: "Drag queen"},
@@ -137,12 +136,26 @@ export class UserFormComponent implements OnInit {
     expressionGender: new FormControl(null, []),
   })
 
-
-  constructor() {}
+  // DI - dependance injection
+  constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.changeCountry();
     this.controlProgressBar();
+    this.loadListSexOrientation();
+  }
+
+  ngOnDestroy() {
+    this.unsubscriptions$.forEach((sb: Subscription)=> sb.unsubscribe());
+  }
+
+  private loadListSexOrientation() {
+    const subscription = this.userService.listSexesOrientation({})
+    .pipe(
+      tap((sexesOrientation: any[])=> this.sexesOrientation = sexesOrientation),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
   }
 
   public print() {

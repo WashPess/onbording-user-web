@@ -1,32 +1,30 @@
-
-
 import { Injectable } from '@angular/core';
-import { concatAll, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, delay, finalize, Observable, of } from 'rxjs';
+
+import { SexesOrientationMock } from './mock/sexes-orientation.mock';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
 
+  private _loadingSexesOrientation = new BehaviorSubject<boolean>(false);
+  // public get loadingSexesOrientation() {
+
+  // }
+
   constructor() { }
 
-  getSexOrientation(): Observable<any> {
-    const sexOrientation = [
-      { code: "heterossexual", name: "Heterossexual"},
-      { code: "homossexual", name: "Homossexual"},
-      { code: "pansexual", name: "Pansexual"},
-      { code: "assexual", name: "Assexual"},
-      { code: "bissexual", name: "Bissexual"},
-      { code: "intersexual", name: "Intersexual"},
-      { code: "NA", name: "Nenhuma das Alternativas" },
-    ];
+  // busca um lista de orientaçao sexual
+  listSexesOrientation(query: any): Observable<any[]> {
 
-    return of(sexOrientation);
+    const uri = `/sexorientarion`;
+    this._loadingSexesOrientation.next(true);
+    return of(SexesOrientationMock).pipe(delay(4000))
+    .pipe(
+      finalize(()=> this._loadingSexesOrientation.next(false))
+    );
 
   }
 
 }
-function caoncatAll(w: Observable<number[]>): import("rxjs").OperatorFunction<{ code: string; name: string; }[], any[]> {
-  throw new Error('Function not implemented.');
-}
-
