@@ -33,8 +33,12 @@ a[href] {
 
 .form-control,
 .form-select {
+  font-family: "Geist Mono", monospace;
+  letter-spacing: 0.1ch;
+  border-radius: 8px;
   background-color: #F9F9F9 !important;
-  border: none;
+  border: groove;
+  color: rgb(0, 0, 0);
 }
 
 .fs-7 {
@@ -59,4 +63,40 @@ a[href] {
 
 .text-default{
   color: rgba(153, 161, 183, 0.5);
+}
+
+.animated-gradient {
+  background: repeating-linear-gradient(to right, rgb(255,0,0) 0%, rgb(255, 255, 0) 50%);
+  width: 100%;
+  background-size: 200% auto;
+  background-position: 0 100%;
+}
+.animated-gradient2 {
+  background: repeating-linear-gradient(to right, rgb(255, 255, 0) 0%, rgb(0, 0, 255) 50% );
+  width: 100%;
+  background-size: 200% auto;
+  background-position: 0 100%;
+}
+.animated-gradient3 {
+  background: repeating-linear-gradient(to right, rgb(0, 0, 255) 0%, rgb(0, 183, 255)50% );
+  width: 100%;
+  background-size: 200% auto;
+  background-position: 0 100%;
+}
+.animated-gradient4 {
+  background: repeating-linear-gradient(to right,  rgb(0, 183, 255) 0%, rgb(0, 255, 0)50% );
+  width: 100%;
+  background-size: 200% auto;
+  background-position: 0 100%;
+}
+.animated-gradient5 {
+  background: repeating-linear-gradient(to right,  rgb(0, 255, 0) 0%, rgb(255, 0, 0)50% );
+  width: 100%;
+  background-size: 200% auto;
+  background-position: 0 100%;
+}
+
+@keyframes gradient {
+  0%   { background-position: 0 0; }
+  100% { background-position: -200% 0; }
 }

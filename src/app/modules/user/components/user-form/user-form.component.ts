@@ -14,6 +14,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   private unsubscriptions$: Subscription[] = <Subscription[]>[];
   public loadingSexesOrientation$: Observable<boolean> = of(false);
+  public loadingExpressionsGender$: Observable<boolean> = of(false);
+  public loadingSexes$: Observable<boolean> = of(false);
+  public loadingGenders$: Observable<boolean> = of(false);
+  public loadingGendersIdentity$: Observable<boolean> = of(false);
 
   public percent = 0; // percentual da barra de progresso
 
@@ -75,54 +79,22 @@ export class UserFormComponent implements OnInit, OnDestroy {
     { code: "INR", name: "Indian Rupee" },
   ];
 
-  public sexes = [
-    { code: "homem", name: "Homem"},
-    { code: "mulher", name: "Mulher"},
-    { code: "NA", name: "Nenhuma das Alternativas" },
-
-  ]
-
-  public genders = [
-    { code: "mulher_cis", name: "Mulher cisgênero" },
-    { code: "mulher_trans", name: "Mulher transgênero" },
-    { code: "homem_cis", name: "Homem cisgênero" },
-    { code: "homem_trans", name: "Homem transgênero" },
-    { code: "genero_nb", name: "Gênero não-binário" },
-    { code: "agenero", name: "Agênero" },
-    { code: "genero_fluido", name: "Gênero-fluido" },
-    { code: "bigenero", name: "Bigênero" },
-    { code: "mulher_transexual", name: "Mulher transexual" },
-    { code: "homem_transexual", name: "Homem transexual" },
-    { code: "poligenero", name: "Poligênero" },
-    { code: "NA", name: "Nenhuma das Alternativas" },
-  ];
-
-  public gendersIdentity = [
-    { code: "cisgenero", name: "Cisgênero"},
-    { code: "transgenero", name: "Transgênero"},
-    { code: "nao_binario", name: "Não-binário"},
-    { code: "boyceta", name: "Boyceta"},
-    { code: "NA", name: "Nenhuma das Alternativas" },
-  ]
-
+  public sexes: any[] = [];
+  public genders: any[] = [];
+  public gendersIdentity: any[] = [];
   public sexesOrientation: any[] = [];
-
-  public expressionsGender = [
-    { code: "drag_queen", name: "Drag queen"},
-    { code: "drag_king", name: "Drag king"},
-    { code: "NA", name: "Nenhuma das Alternativas" },
-  ]
+  public expressionsGender: any[] = [];
 
   public form = new FormGroup({
-    firstName: new FormControl('simão', []),
-    lastName: new FormControl('pedro', []),
-    company: new FormControl('Facebook', []),
-    contactPhone: new FormControl('99 9999 9999', []),
-    companySite: new FormControl('www.facebook.com', []),
-    country: new FormControl('BR', []),
-    language: new FormControl('PT-BR', []),
-    timeZone: new FormControl('CET', []),
-    currency: new FormControl('BRL', []),
+    firstName: new FormControl('', []),
+    lastName: new FormControl('', []),
+    company: new FormControl('', []),
+    contactPhone: new FormControl('', []),
+    companySite: new FormControl('', []),
+    country: new FormControl('', []),
+    language: new FormControl('', []),
+    timeZone: new FormControl('', []),
+    currency: new FormControl('', []),
     email: new FormControl(true, []),
     telefone: new FormControl(true, []),
     allowMarketing: new FormControl(true, []),
@@ -137,12 +109,22 @@ export class UserFormComponent implements OnInit, OnDestroy {
   })
 
   // DI - dependance injection
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    this.loadingSexesOrientation$ = this.userService.loadingSexesOrientation$;
+    this.loadingExpressionsGender$ = this.userService.loadingExpressionsGender$;
+    this.loadingSexes$ = this.userService.loadingSexes$;
+    this.loadingGenders$ = this.userService.loadingGenders$;
+    this.loadingGendersIdentity$ = this.userService.loadingGendersIdentity$;
+  }
 
   ngOnInit() {
     this.changeCountry();
     this.controlProgressBar();
     this.loadListSexOrientation();
+    this.loadListExpressionsGender();
+    this.loadListSexes();
+    this.loadListGenders();
+    this.loadListGendersIdentity();
   }
 
   ngOnDestroy() {
@@ -153,6 +135,42 @@ export class UserFormComponent implements OnInit, OnDestroy {
     const subscription = this.userService.listSexesOrientation({})
     .pipe(
       tap((sexesOrientation: any[])=> this.sexesOrientation = sexesOrientation),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListGenders() {
+    const subscription = this.userService.listGenders({})
+    .pipe(
+      tap((genders: any[])=> this.genders = genders),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListGendersIdentity() {
+    const subscription = this.userService.listGendersIdentity({})
+    .pipe(
+      tap((gendersIdentity: any[])=> this.gendersIdentity = gendersIdentity),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListExpressionsGender() {
+    const subscription = this.userService.listExpressionsGender({})
+    .pipe(
+      tap((expressionsGender: any[])=> this.expressionsGender = expressionsGender),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListSexes() {
+    const subscription = this.userService.listSexes({})
+    .pipe(
+      tap((sexes: any[])=> this.sexes = sexes),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
