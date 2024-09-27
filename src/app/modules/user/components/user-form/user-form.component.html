@@ -68,6 +68,11 @@
       <option selected disabled>Selecione seu idioma</option>
       <option *ngFor="let language of languages" [value]="language.acronym">{{language.name}}</option>
     </select>
+    <ng-container *ngIf="loadingLanguages$ | async">
+      <div class="spinner-border spinner-grow-sm" role="status" style="position: relative !important; top: -32px !important; margin-left: 5px;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </ng-container>
     <div id="emailHelp" class="form-text text-muted">Please select a preferred language, including date, time, and number formatting.</div>
   </div>
 
@@ -235,8 +240,6 @@
 
   </div>
 
-
-
-  <button (click)="print()">print</button>
+  <button class="btn btn-primary" (click)="save()">Save</button>
 
 </form>

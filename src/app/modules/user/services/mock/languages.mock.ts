@@ -1,0 +1,15 @@
+export const LanguagesMock = [
+    { name: 'Portugues', acronym: 'PT-BR' },
+    { name: 'Castelhano Argentino', acronym: 'CA-AG' },
+    { name: 'Castelhano Colombiano', acronym: 'CA-CO' },
+    { name: 'Castelhano Uruguaiano', acronym: 'CA-UR' },
+    { name: 'Espanhol Paraguaio', acronym: 'ES-PA' },
+    { name: 'Espanhol Venezuelano', acronym: 'ES-VE' },
+    { name: 'Espanhol Peruano', acronym: 'ES-PE' },
+    { name: 'Castelhano Chinelo', acronym: 'ES-CH' },
+    { name: 'Ingles', acronym: 'EG-GU' },
+    { name: 'Frances', acronym: 'FC-GF' },
+    { name: 'Espanhol Boliviano', acronym: 'ES-BO' },
+    { name: 'Espanhol Equatorianos', acronym: 'ES-EQ' },
+    { name: 'Neerlandês', acronym: 'NE-SU' },
+  ];

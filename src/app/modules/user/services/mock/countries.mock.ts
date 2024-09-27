@@ -1,0 +1,15 @@
+export const CountriesMock = [
+  { name: 'Brasil', code: 'BR' },
+  { name: 'Argentina', code: 'AG' },
+  { name: 'Colombia', code: 'CO' },
+  { name: 'Uruguai', code: 'UR' },
+  { name: 'Paraguai', code: 'PA' },
+  { name: 'Venezuela', code: 'VE' },
+  { name: 'Peru', code: 'PE' },
+  { name: 'Chile', code: 'CH' },
+  { name: 'Guiana', code: 'GU' },
+  { name: 'Guiana Francesa', code: 'GF' },
+  { name: 'Bolívia', code: 'BO' },
+  { name: 'Equador', code: 'EQ' },
+  { name: 'Suriname', code: 'SU' },
+]

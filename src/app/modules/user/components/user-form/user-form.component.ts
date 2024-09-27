@@ -1,9 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription, tap } from 'rxjs';
 
 
 import { UserService } from '../../services/user.service';
+import { Country } from '../../models/country.model';
+import { Language } from '../../models/language.model';
+import { Timezone } from '../../models/timezone.model';
+import { Currency } from '../../models/currency.model';
+import { Sex } from '../../models/sex.model';
+import { Gender } from '../../models/gender.model';
+import { GenderIdentity } from '../../models/gender-identity.model';
+import { SexOrientation } from '../../models/sex-orientation.model';
+import { ExpressionGender } from '../../models/expression-gender.model';
 
 @Component({
   selector: 'app-user-form',
@@ -18,86 +27,35 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public loadingSexes$: Observable<boolean> = of(false);
   public loadingGenders$: Observable<boolean> = of(false);
   public loadingGendersIdentity$: Observable<boolean> = of(false);
+  public loadingCountries$: Observable<boolean> = of(false);
+  public loadingLanguages$: Observable<boolean> = of(false);
+  public loadingTimezones$: Observable<boolean> = of(false);
+  public loadingCurrencies$: Observable<boolean> = of(false);
 
   public percent = 0; // percentual da barra de progresso
-
-  public countries = [
-    { name: 'Brasil', code: 'BR' },
-    { name: 'Argentina', code: 'AG' },
-    { name: 'Colombia', code: 'CO' },
-    { name: 'Uruguai', code: 'UR' },
-    { name: 'Paraguai', code: 'PA' },
-    { name: 'Venezuela', code: 'VE' },
-    { name: 'Peru', code: 'PE' },
-    { name: 'Chile', code: 'CH' },
-    { name: 'Guiana', code: 'GU' },
-    { name: 'Guiana Francesa', code: 'GF' },
-    { name: 'Bolívia', code: 'BO' },
-    { name: 'Equador', code: 'EQ' },
-    { name: 'Suriname', code: 'SU' },
-  ];
-
-  public languages = [
-    { name: 'Portugues', acronym: 'PT-BR' },
-    { name: 'Castelhano Argentino', acronym: 'CA-AG' },
-    { name: 'Castelhano Colombiano', acronym: 'CA-CO' },
-    { name: 'Castelhano Uruguaiano', acronym: 'CA-UR' },
-    { name: 'Espanhol Paraguaio', acronym: 'ES-PA' },
-    { name: 'Espanhol Venezuelano', acronym: 'ES-VE' },
-    { name: 'Espanhol Peruano', acronym: 'ES-PE' },
-    { name: 'Castelhano Chinelo', acronym: 'ES-CH' },
-    { name: 'Ingles', acronym: 'EG-GU' },
-    { name: 'Frances', acronym: 'FC-GF' },
-    { name: 'Espanhol Boliviano', acronym: 'ES-BO' },
-    { name: 'Espanhol Equatorianos', acronym: 'ES-EQ' },
-    { name: 'Neerlandês', acronym: 'NE-SU' },
-  ];
-
-  public timezones = [
-    { code: "UTC", name: "Coordinated Universal Time" },
-    { code: "GMT", name: "Greenwich Mean Time" },
-    { code: "EST", name: "Eastern Standard Time (US & Canada)" },
-    { code: "CST", name: "Central Standard Time (US & Canada)" },
-    { code: "PST", name: "Pacific Standard Time (US & Canada)" },
-    { code: "CET", name: "Central European Time" },
-    { code: "EET", name: "Eastern European Time" },
-    { code: "JST", name: "Japan Standard Time" },
-    { code: "IST", name: "India Standard Time" },
-    { code: "AEST", name: "Australian Eastern Standard Time" },
-  ];
-
-  public currencies = [
-    { code: "USD", name: "United States Dollar" },
-    { code: "EUR", name: "Euro" },
-    { code: "JPY", name: "Japanese Yen" },
-    { code: "GBP", name: "British Pound Sterling" },
-    { code: "AUD", name: "Australian Dollar" },
-    { code: "CAD", name: "Canadian Dollar" },
-    { code: "CHF", name: "Swiss Franc" },
-    { code: "CNY", name: "Chinese Yuan" },
-    { code: "BRL", name: "Brazilian Real" },
-    { code: "INR", name: "Indian Rupee" },
-  ];
-
-  public sexes: any[] = [];
-  public genders: any[] = [];
-  public gendersIdentity: any[] = [];
-  public sexesOrientation: any[] = [];
-  public expressionsGender: any[] = [];
+  public countries: Country[] = <Country[]>[];
+  public languages: Language[] = <Language[]>[];
+  public timezones: Timezone[] = <Timezone[]>[];
+  public currencies: Currency[] = <Currency[]>[];
+  public sexes: Sex[] = <Sex[]>[];
+  public genders: Gender[] = <Gender[]>[];
+  public gendersIdentity: GenderIdentity[] = <GenderIdentity[]>[];
+  public sexesOrientation: SexOrientation[] = <SexOrientation[]>[];
+  public expressionsGender: ExpressionGender[] = <ExpressionGender[]>[];
 
   public form = new FormGroup({
-    firstName: new FormControl('', []),
-    lastName: new FormControl('', []),
-    company: new FormControl('', []),
-    contactPhone: new FormControl('', []),
-    companySite: new FormControl('', []),
-    country: new FormControl('', []),
-    language: new FormControl('', []),
-    timeZone: new FormControl('', []),
-    currency: new FormControl('', []),
-    email: new FormControl(true, []),
-    telefone: new FormControl(true, []),
-    allowMarketing: new FormControl(true, []),
+    firstName: new FormControl('', [Validators.required, Validators.min(2)]),
+    lastName: new FormControl('', [Validators.required, Validators.min(2)]),
+    company: new FormControl('', [Validators.required]),
+    contactPhone: new FormControl('', [Validators.required, Validators.min(11)]),
+    companySite: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    country: new FormControl('', [Validators.required, Validators.min(2)]),
+    language: new FormControl('', [Validators.required]),
+    timeZone: new FormControl('', [Validators.required]),
+    currency: new FormControl('', [Validators.required]),
+    email: new FormControl(true, [Validators.required]),
+    telefone: new FormControl(true, [Validators.required]),
+    allowMarketing: new FormControl(true, [Validators.required]),
   });
 
   public formGender = new FormGroup({
@@ -115,6 +73,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loadingSexes$ = this.userService.loadingSexes$;
     this.loadingGenders$ = this.userService.loadingGenders$;
     this.loadingGendersIdentity$ = this.userService.loadingGendersIdentity$;
+    this.loadingCountries$ = this.userService.loadingCountries$;
+    this.loadingLanguages$ = this.userService.loadingLanguages$;
+    this.loadingTimezones$ = this.userService.loadingTimezones$;
+    this.loadingCurrencies$ = this.userService.loadingCurrencies$;
   }
 
   ngOnInit() {
@@ -125,16 +87,30 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loadListSexes();
     this.loadListGenders();
     this.loadListGendersIdentity();
+    this.loadListCountries();
+    this.loadListLanguages();
+    this.loadListTimezones();
+    this.loadListCurrencies();
   }
 
   ngOnDestroy() {
     this.unsubscriptions$.forEach((sb: Subscription)=> sb.unsubscribe());
   }
 
+  public loadListCountries() {
+    this.countries = [];
+    const subscription = this.userService.listCountries({})
+    .pipe(
+      tap((countries: Country[])=> this.countries = countries),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
   private loadListSexOrientation() {
     const subscription = this.userService.listSexesOrientation({})
     .pipe(
-      tap((sexesOrientation: any[])=> this.sexesOrientation = sexesOrientation),
+      tap((sexesOrientation: SexOrientation[])=> this.sexesOrientation = sexesOrientation),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
@@ -143,7 +119,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private loadListGenders() {
     const subscription = this.userService.listGenders({})
     .pipe(
-      tap((genders: any[])=> this.genders = genders),
+      tap((genders: Gender[])=> this.genders = genders),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
@@ -152,7 +128,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private loadListGendersIdentity() {
     const subscription = this.userService.listGendersIdentity({})
     .pipe(
-      tap((gendersIdentity: any[])=> this.gendersIdentity = gendersIdentity),
+      tap((gendersIdentity: GenderIdentity[])=> this.gendersIdentity = gendersIdentity),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
@@ -161,7 +137,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private loadListExpressionsGender() {
     const subscription = this.userService.listExpressionsGender({})
     .pipe(
-      tap((expressionsGender: any[])=> this.expressionsGender = expressionsGender),
+      tap((expressionsGender: ExpressionGender[])=> this.expressionsGender = expressionsGender),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
@@ -170,7 +146,37 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private loadListSexes() {
     const subscription = this.userService.listSexes({})
     .pipe(
-      tap((sexes: any[])=> this.sexes = sexes),
+      tap((sexes: Sex[])=> this.sexes = sexes),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListLanguages() {
+    this.languages = [];
+    const subscription = this.userService.listLanguages({})
+    .pipe(
+      tap((languages: Language[])=> this.languages = languages),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListTimezones() {
+    this.timezones = [];
+    const subscription = this.userService.listTimezones({})
+    .pipe(
+      tap((timezones: Timezone[])=> this.timezones = timezones),
+    ).subscribe();
+
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadListCurrencies() {
+    this.currencies = [];
+    const subscription = this.userService.listCurrencies({})
+    .pipe(
+      tap((currencies: Currency[])=> this.currencies = currencies),
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
@@ -242,5 +248,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  public save() {
+    const user = this.form.value;
+
+
+    console.log("USER: ", this.form.valid);
+  }
 
 }
