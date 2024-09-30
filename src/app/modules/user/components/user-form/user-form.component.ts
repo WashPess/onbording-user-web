@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription, tap } from 'rxjs';
 
@@ -21,24 +21,26 @@ import { ExpressionGender } from '../../models/expression-gender.model';
 })
 export class UserFormComponent implements OnInit, OnDestroy {
 
+  @Output() changeForm = new EventEmitter<FormGroup>();
+
   private unsubscriptions$: Subscription[] = <Subscription[]>[];
-  public loadingSexesOrientation$: Observable<boolean> = of(false);
   public loadingExpressionsGender$: Observable<boolean> = of(false);
-  public loadingSexes$: Observable<boolean> = of(false);
-  public loadingGenders$: Observable<boolean> = of(false);
+  public loadingSexesOrientation$: Observable<boolean> = of(false);
   public loadingGendersIdentity$: Observable<boolean> = of(false);
+  public loadingCurrencies$: Observable<boolean> = of(false);
   public loadingCountries$: Observable<boolean> = of(false);
   public loadingLanguages$: Observable<boolean> = of(false);
   public loadingTimezones$: Observable<boolean> = of(false);
-  public loadingCurrencies$: Observable<boolean> = of(false);
+  public loadingGenders$: Observable<boolean> = of(false);
+  public loadingSexes$: Observable<boolean> = of(false);
 
   public percent = 0; // percentual da barra de progresso
+  public sexes: Sex[] = <Sex[]>[];
+  public genders: Gender[] = <Gender[]>[];
   public countries: Country[] = <Country[]>[];
   public languages: Language[] = <Language[]>[];
   public timezones: Timezone[] = <Timezone[]>[];
   public currencies: Currency[] = <Currency[]>[];
-  public sexes: Sex[] = <Sex[]>[];
-  public genders: Gender[] = <Gender[]>[];
   public gendersIdentity: GenderIdentity[] = <GenderIdentity[]>[];
   public sexesOrientation: SexOrientation[] = <SexOrientation[]>[];
   public expressionsGender: ExpressionGender[] = <ExpressionGender[]>[];
@@ -46,16 +48,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public form = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.min(2)]),
     lastName: new FormControl('', [Validators.required, Validators.min(2)]),
-    company: new FormControl('', [Validators.required]),
-    contactPhone: new FormControl('', [Validators.required, Validators.min(11)]),
-    companySite: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    country: new FormControl('', [Validators.required, Validators.min(2)]),
-    language: new FormControl('', [Validators.required]),
-    timeZone: new FormControl('', [Validators.required]),
-    currency: new FormControl('', [Validators.required]),
-    email: new FormControl(true, [Validators.required]),
-    telefone: new FormControl(true, [Validators.required]),
-    allowMarketing: new FormControl(true, [Validators.required]),
+    email: new FormControl('', [Validators.required]),
+    document: new FormControl('', [Validators.required]),
+    nickname: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+    confirmPassword: new FormControl('', [Validators.required]),
+    optin: new FormControl(false, [Validators.required]),
   });
 
   public formGender = new FormGroup({
@@ -91,6 +89,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loadListLanguages();
     this.loadListTimezones();
     this.loadListCurrencies();
+
+    this.form.valueChanges.subscribe(()=>{
+      this.changeForm.emit(this.form)
+    })
   }
 
   ngOnDestroy() {
@@ -241,18 +243,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
       }
       this.form.get('qualqiercoisa')?.enable();
       this.form.get('currency')?.disable();
-
-      if (value === 'BR') {
-        this.form.get('currency')?.setValue('BRL');
-      }
     });
   }
-
-  public save() {
-    const user = this.form.value;
-
-
-    console.log("USER: ", this.form.valid);
-  }
-
 }

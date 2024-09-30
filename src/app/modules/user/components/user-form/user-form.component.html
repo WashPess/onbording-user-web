@@ -14,124 +14,60 @@
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">Company <span class="text-danger">*</span></label>
+    <label class="form-label">Email <span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <input class="form-control" type="text" placeholder="Facebook" formControlName="company" name="company">
+    <input class="form-control" type="text" placeholder="asdf@asdf.com" formControlName="email" name="email">
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">
-      Contact Phone
-      <span class="text-danger">*</span>
-      <span class="ms-1" ngbTooltip="Phone number be must active"><i class="bi text-default fs-8 bi-exclamation-circle-fill"></i></span>
-    </label>
+    <label class="form-label">Document<span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <input class="form-control" formControlName="sGPTypeDeliveryId" type="number" placeholder="Number Only" formControlName="contactPhone" name="contactPhone" required="required" pattern="[0-9]+$">
+    <input class="form-control" type="text" placeholder="CPF / CNPJ" formControlName="document" name="document">
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">Company Site</label>
+    <label class="form-label">Nickname <span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <input class="form-control" type="text" placeholder="facebook.com" formControlName="companySite" name="companySite">
+    <input class="form-control" type="text" placeholder="Nickname" formControlName="nickname" name="nickname">
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">
-      Country
-      <span class="text-danger">*</span>
-      <span class="ms-1" ngbTooltip="Country of origination"><i class="bi text-default fs-8 bi-exclamation-circle-fill"></i></span>
-    </label>
+    <label class="form-label">Password <span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <select class="form-select" aria-label="Default select example" formControlName="country" name="country">
-      <option selected disabled>Selecione seu país</option>
-      <option [value]="country.code" *ngFor="let country of countries">{{country.name}}</option>
-    </select>
+    <input class="form-control" type="text" placeholder="***" formControlName="password" name="password">
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">
-      Language
-      <span class="text-danger">*</span>
-    </label>
+    <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <select class="form-select" aria-label="Default select example" formControlName="language" name="language">
-      <option selected disabled>Selecione seu idioma</option>
-      <option *ngFor="let language of languages" [value]="language.acronym">{{language.name}}</option>
-    </select>
-    <ng-container *ngIf="loadingLanguages$ | async">
-      <div class="spinner-border spinner-grow-sm" role="status" style="position: relative !important; top: -32px !important; margin-left: 5px;">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </ng-container>
-    <div id="emailHelp" class="form-text text-muted">Please select a preferred language, including date, time, and number formatting.</div>
+    <input class="form-control" type="text" placeholder="***" formControlName="confirmPassword" name="confirmPassword">
   </div>
 
   <div class="col-4 mb-3">
-    <label class="form-label">
-      Time Zone
-      <span class="text-danger">*</span>
-    </label>
+    <label class="form-label">Accept terms<span class="text-danger">*</span></label>
   </div>
 
   <div class="col-8 mb-3">
-    <select class="form-select" aria-label="Default select example" formControlName="timeZone" name="timeZone">
-      <option selected disabled>Select timezone</option>
-      <option [value]="timezone.code" *ngFor="let timezone of timezones">{{timezone.name}}</option>
-    </select>
-  </div>
-
-  <div class="col-4 mb-3">
-    <label class="form-label">
-      Currency
-      <span class="text-danger">*</span>
-    </label>
-  </div>
-
-  <div class="col-8 mb-3">
-    <select class="form-select" aria-label="Default select example" formControlName="currency" name="currency">
-      <option selected disabled>Select Currency</option>
-      <option [value]="currency.code" *ngFor="let currency of currencies">{{currency.name}}</option>
-    </select>
-  </div>
-
-  <div class="col-4 mb-3">
-    <label class="form-label">Communication<span class="text-danger">*</span></label>
-  </div>
-
-  <div class="col-8 mb-3 d-flex justify-content-start gap-5">
-
     <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="email" name="email">
-      <label class="form-check-label" for="flexCheckDefault">Email</label>
-    </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" formControlName="telefone" name="telefone">
-      <label class="form-check-label" for="flexCheckChecked">Telefone</label>
+      <input class="form-check-input" type="checkbox" id="optin-terms" formControlName="optin" name="optin">
+      <label class="form-check-label" for="optin-terms">
+        Accept
+      </label>
     </div>
   </div>
 
-  <div class="col-4 mb-3">
-    <label class="form-label">Allow Marketing</label>
-  </div>
 
-  <div class="col-8 mb-3">
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" formControlName="allowMarketing" name="allowMarketing">
-    </div>
-  </div>
-
-  <div class="col-12 mb-3 pt-4">
+  <div class="col-12 mb-3 pt-4 d-none">
     <h2>Monte se Gênero</h2>
     <form [formGroup]="formGender" class="row border rounded m-0 p-4">
 
@@ -237,9 +173,6 @@
       </div>
 
     </form>
-
   </div>
-
-  <button class="btn btn-primary" (click)="save()">Save</button>
 
 </form>
