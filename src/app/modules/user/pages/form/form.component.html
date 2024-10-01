@@ -10,8 +10,23 @@
 
   <div class="card-footer p-4">
     <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-light border text-muted">Discard</button>
-      <button class="btn btn-primary">Save Changes</button>
+
+      <button class="btn btn-light border text-muted" (click)="reset()">Discard</button>
+
+      <button class="btn btn-primary" (click)="save()" [disabled]="(loadingSave$ | async)">
+
+        <ng-container *ngIf="!(loadingSave$ | async)">
+          <span>Save Changes</span>
+        </ng-container>
+
+        <ng-container *ngIf="(loadingSave$ | async)">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading...</span>
+          <span class="ms-2">Awaiting...</span>
+        </ng-container>
+
+      </button>
+
     </div>
   </div>
 

@@ -24,6 +24,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   @Output() changeForm = new EventEmitter<FormGroup>();
 
   private unsubscriptions$: Subscription[] = <Subscription[]>[];
+
   public loadingExpressionsGender$: Observable<boolean> = of(false);
   public loadingSexesOrientation$: Observable<boolean> = of(false);
   public loadingGendersIdentity$: Observable<boolean> = of(false);
@@ -89,10 +90,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     this.loadListLanguages();
     this.loadListTimezones();
     this.loadListCurrencies();
-
-    this.form.valueChanges.subscribe(()=>{
-      this.changeForm.emit(this.form)
-    })
+    this.notifyForm();
   }
 
   ngOnDestroy() {
@@ -182,6 +180,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
     ).subscribe();
 
     this.unsubscriptions$.push(subscription);
+  }
+
+  private notifyForm() {
+    this.changeForm.emit(this.form);
+    this.form.valueChanges.subscribe(()=> this.changeForm.emit(this.form));
   }
 
   public print() {

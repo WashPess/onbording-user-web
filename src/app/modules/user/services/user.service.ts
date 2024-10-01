@@ -20,10 +20,19 @@ import { GenderIdentity } from '../models/gender-identity.model';
 import { SexOrientation } from '../models/sex-orientation.model';
 import { ExpressionGender } from '../models/expression-gender.model';
 
+import { HttpClient } from '@angular/common/http';
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+
+  private endpointV1 = 'http://127.0.0.1:9090';
+
+  private _loadingSave = new BehaviorSubject<boolean>(false);
+  public get loadingSave$(): Observable<boolean> {
+    return this._loadingSave.asObservable();
+  }
 
   private _loadingCurrencies = new BehaviorSubject<boolean>(false);
   public get loadingCurrencies$(): Observable<boolean> {
@@ -70,7 +79,17 @@ export class UserService {
     return this._loadingLanguages.asObservable();
   }
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  public save(user: any): Observable<any> {
+
+    const url = `${this.endpointV1}/user`;
+    this._loadingSave.next(true);
+    return this.http.post(url, user)
+    .pipe(
+      finalize(()=> this._loadingSave.next(false)),
+    );
+  }
 
   listTimezones(query: any): Observable<Timezone[]> {
 
