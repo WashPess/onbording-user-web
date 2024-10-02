@@ -5,8 +5,8 @@ import { CommonModule, NgFor, JsonPipe } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BsDropdownModule} from 'ngx-bootstrap/dropdown';
+import { NgbModule, NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule ({
   declarations: [],
@@ -17,16 +17,19 @@ import { BsDropdownModule} from 'ngx-bootstrap/dropdown';
     FormsModule,
     RouterModule,
     CommonModule,
+    NgbToastModule,
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
 	],
   exports: [
     NgFor,
     JsonPipe,
+    NgbToast,
     NgbModule,
     FormsModule,
     RouterModule,
     CommonModule,
+    NgbToastModule,
     BsDropdownModule,
     ReactiveFormsModule,
   ]

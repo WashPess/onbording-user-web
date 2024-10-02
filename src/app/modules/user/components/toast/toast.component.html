@@ -1,0 +1,19 @@
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1000 !important">
+  <div
+    class="toast bg-{{type}}-subtle border-{{type}}-subtle"
+    [ngClass]="{ 'show': activeLocal, 'hide': !activeLocal }"
+    aria-live="assertive"
+    aria-atomic="true"
+    role="alert"
+  >
+    <div class="toast-header d-flex justify-content-between" >
+      <div class="flex-fill">
+        <span>{{title}}</span>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      <span>{{message}}</span>
+    </div>
+  </div>
+</div>

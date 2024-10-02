@@ -47,14 +47,14 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public expressionsGender: ExpressionGender[] = <ExpressionGender[]>[];
 
   public form = new FormGroup({
-    firstName: new FormControl('', [Validators.required, Validators.min(2)]),
-    lastName: new FormControl('', [Validators.required, Validators.min(2)]),
-    email: new FormControl('', [Validators.required]),
-    document: new FormControl('', [Validators.required]),
-    nickname: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required]),
-    optin: new FormControl(false, [Validators.required]),
+    firstName: new FormControl('Max', [Validators.required, Validators.min(2)]),
+    lastName: new FormControl('Smitch', [Validators.required, Validators.min(2)]),
+    email: new FormControl('email@email.com', [Validators.required]),
+    document: new FormControl('75146970041', [Validators.required]),
+    nickname: new FormControl('max1024', [Validators.required]),
+    password: new FormControl('Alterar@123', [Validators.required]),
+    confirmPassword: new FormControl('Alterar@123', [Validators.required]),
+    optin: new FormControl(true, [Validators.required]),
   });
 
   public formGender = new FormGroup({

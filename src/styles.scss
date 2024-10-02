@@ -100,3 +100,20 @@ a[href] {
   0%   { background-position: 0 0; }
   100% { background-position: -200% 0; }
 }
+
+.bg-success-subtle > .toast-header,
+.bg-info-subtle > .toast-header,
+.bg-danger-subtle > .toast-header,
+.bg-primary-subtle > .toast-header,
+.bg-secondary-subtle > .toast-header,
+.bg-warning-subtle > .toast-header {
+  background-color: rgba(255,255, 255, 0.3);
+}
+
+
+.bg-none {
+  background-color: transparent !important;
+}
+
+
+// [class^="bg-"][class$="-subtle"] > .toast-header

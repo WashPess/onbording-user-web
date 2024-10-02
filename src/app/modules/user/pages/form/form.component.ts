@@ -2,6 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { of, Subscription } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 
 @Component({
@@ -14,6 +15,11 @@ export class FormComponent implements OnDestroy {
   private unsubscribe$: Subscription[] = <Subscription[]>[];
 
   public loadingSave$ = of(false);
+  public message = '';
+
+  public get isVisibleError(): boolean {
+    return String(this.message).length > 0;
+  }
 
   public userForm = new FormGroup({});
 
@@ -40,7 +46,11 @@ export class FormComponent implements OnDestroy {
     const subscription = this.userService.save(user)
     .subscribe({
       next: (a: any)=> console.log("SUCESSO: ", a),
-      error: (err: any)=> console.log("ERROR: ", err),
+      error: (err: HttpErrorResponse)=> {
+        const { error : { message } } = err;
+        this.message = message;
+        console.log("ERROR: ", message, err);
+      },
     });
 
     this.unsubscribe$.push(subscription);
@@ -50,6 +60,10 @@ export class FormComponent implements OnDestroy {
 
   public reset() {
     this.userForm.reset();
+  }
+
+  private hideToast() {
+
   }
 
 }
