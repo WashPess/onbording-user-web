@@ -46,12 +46,16 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public sexesOrientation: SexOrientation[] = <SexOrientation[]>[];
   public expressionsGender: ExpressionGender[] = <ExpressionGender[]>[];
 
+  public get firstName() {
+    return this.form.get('firstName');
+  }
+
   public form = new FormGroup({
-    firstName: new FormControl('Max', [Validators.required, Validators.min(2)]),
-    lastName: new FormControl('Smitch', [Validators.required, Validators.min(2)]),
-    email: new FormControl('email@email.com', [Validators.required]),
-    document: new FormControl('75146970041', [Validators.required]),
-    nickname: new FormControl('max1024', [Validators.required]),
+    firstName: new FormControl('Max', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
+    lastName: new FormControl('Smitch', [Validators.required, Validators.minLength(2),  Validators.maxLength(30)]),
+    email: new FormControl('email@email.com', [Validators.required, Validators.email]),
+    document: new FormControl('75146970041', [Validators.required, Validators.minLength(11), Validators.max(14)]),
+    nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     password: new FormControl('Alterar@123', [Validators.required]),
     confirmPassword: new FormControl('Alterar@123', [Validators.required]),
     optin: new FormControl(true, [Validators.required]),
@@ -247,5 +251,19 @@ export class UserFormComponent implements OnInit, OnDestroy {
       this.form.get('qualqiercoisa')?.enable();
       this.form.get('currency')?.disable();
     });
+  }
+
+  public hasError(item: any): boolean {
+    if(!item) {
+      return false;
+    }
+
+    const keys = Object.keys(item);
+    return keys.length > 0;
+  }
+
+  public validatePassword(password: string): boolean {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return passwordRegex.test(password);
   }
 }

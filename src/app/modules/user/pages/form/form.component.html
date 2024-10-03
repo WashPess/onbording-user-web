@@ -1,5 +1,7 @@
 
-<app-toast type="danger" [delay]="5000" [active]="isVisibleError" title="Erro" [message]="message"></app-toast>
+<ng-container *ngFor="let ob of observers">
+  <app-toast [type]="ob.type" [delay]="5000" [active]="true" title="Notificação" [message]="ob.message" (hidedChange)="unnotify($event, ob)"></app-toast>
+</ng-container>
 
 <div class="card shadow rounded-4 mx-4">
 

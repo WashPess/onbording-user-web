@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay, finalize, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, delay, finalize, map, Observable, of } from 'rxjs';
 
 import { SexesOrientationMock } from './mock/sexes-orientation.mock';
 import { SexesMock } from './mock/sexes.mock';
@@ -85,8 +85,10 @@ export class UserService {
 
     const url = `${this.endpointV1}/user`;
     this._loadingSave.next(true);
+    // return of({}).pipe(delay(5000))
     return this.http.post(url, user)
     .pipe(
+      // catchError((err)=> of(err)),
       finalize(()=> this._loadingSave.next(false)),
     );
   }
