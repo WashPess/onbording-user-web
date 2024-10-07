@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, delay, finalize, map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { SexesOrientationMock } from './mock/sexes-orientation.mock';
 import { SexesMock } from './mock/sexes.mock';
-import { ExpressionsGenderMock } from './mock/expressions-gender.mock';
 import { GendersMock } from './mock/genders.mock';
+import { ExpressionsGenderMock } from './mock/expressions-gender.mock';
 import { GendersIdentityMock } from './mock/genders-identity.mock';
 import { CountriesMock } from './mock/countries.mock';
 import { LanguagesMock } from './mock/languages.mock';
@@ -19,9 +20,6 @@ import { Gender } from '../models/gender.model';
 import { GenderIdentity } from '../models/gender-identity.model';
 import { SexOrientation } from '../models/sex-orientation.model';
 import { ExpressionGender } from '../models/expression-gender.model';
-
-import { HttpClient } from '@angular/common/http';
-
 @Injectable({
   providedIn: 'root',
 })

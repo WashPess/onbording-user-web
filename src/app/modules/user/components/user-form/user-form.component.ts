@@ -13,6 +13,7 @@ import { Gender } from '../../models/gender.model';
 import { GenderIdentity } from '../../models/gender-identity.model';
 import { SexOrientation } from '../../models/sex-orientation.model';
 import { ExpressionGender } from '../../models/expression-gender.model';
+import { Validate } from '../../../shared/utils/validate.form';
 
 @Component({
   selector: 'app-user-form',
@@ -50,14 +51,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return this.form.get('firstName');
   }
 
+  public get confirmPassword() {
+    return this.form.get('confirmPassword');
+  }
+
   public form = new FormGroup({
     firstName: new FormControl('Max', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     lastName: new FormControl('Smitch', [Validators.required, Validators.minLength(2),  Validators.maxLength(30)]),
     email: new FormControl('email@email.com', [Validators.required, Validators.email]),
     document: new FormControl('75146970041', [Validators.required, Validators.minLength(11), Validators.max(14)]),
     nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-    password: new FormControl('Alterar@123', [Validators.required]),
-    confirmPassword: new FormControl('Alterar@123', [Validators.required]),
+    password: new FormControl('Alterar@123', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]),
+    confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.matchValues('password')]),
     optin: new FormControl(true, [Validators.required]),
   });
 
@@ -262,8 +267,4 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return keys.length > 0;
   }
 
-  public validatePassword(password: string): boolean {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    return passwordRegex.test(password);
-  }
 }

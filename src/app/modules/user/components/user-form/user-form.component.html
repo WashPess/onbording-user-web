@@ -58,6 +58,10 @@
 
   <div class="col-8 mb-3">
     <input class="form-control" type="text" placeholder="***" formControlName="confirmPassword" name="confirmPassword">
+    <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)" class="form-text text-danger">
+      <div *ngIf="confirmPassword?.errors?.['required']">É necessario preencher a confirmaçao da senha nome.</div>
+      <div *ngIf="confirmPassword?.errors?.['matchValues']"> A confirmação e a senha não combinam. </div>
+    </div>
   </div>
 
   <div class="col-4 mb-3">
