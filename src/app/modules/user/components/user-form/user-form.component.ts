@@ -3,17 +3,17 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription, tap } from 'rxjs';
 
 
+import { ExpressionGender } from '../../models/expression-gender.model';
+import { GenderIdentity } from '../../models/gender-identity.model';
+import { SexOrientation } from '../../models/sex-orientation.model';
+import { Validate } from '../../../shared/utils/validate.form';
 import { UserService } from '../../services/user.service';
-import { Country } from '../../models/country.model';
 import { Language } from '../../models/language.model';
 import { Timezone } from '../../models/timezone.model';
 import { Currency } from '../../models/currency.model';
-import { Sex } from '../../models/sex.model';
+import { Country } from '../../models/country.model';
 import { Gender } from '../../models/gender.model';
-import { GenderIdentity } from '../../models/gender-identity.model';
-import { SexOrientation } from '../../models/sex-orientation.model';
-import { ExpressionGender } from '../../models/expression-gender.model';
-import { Validate } from '../../../shared/utils/validate.form';
+import { Sex } from '../../models/sex.model';
 
 @Component({
   selector: 'app-user-form',
@@ -51,18 +51,42 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return this.form.get('firstName');
   }
 
+  public get lastName() {
+    return this.form.get('lastName');
+  }
+
+  public get email() {
+    return this.form.get('email');
+  }
+
+  public get document() {
+    return this.form.get('document');
+  }
+
+  public get nickname() {
+    return this.form.get('nickname');
+  }
+
+  public get password() {
+    return this.form.get('password');
+  }
+
   public get confirmPassword() {
     return this.form.get('confirmPassword');
+  }
+
+  public get optin() {
+    return this.form.get('optin');
   }
 
   public form = new FormGroup({
     firstName: new FormControl('Max', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     lastName: new FormControl('Smitch', [Validators.required, Validators.minLength(2),  Validators.maxLength(30)]),
-    email: new FormControl('email@email.com', [Validators.required, Validators.email]),
-    document: new FormControl('75146970041', [Validators.required, Validators.minLength(11), Validators.max(14)]),
+    email: new FormControl('email@email.com', [Validators.required, Validators.email, Validate.hasDomain]),
+    document: new FormControl('75146970041', [Validators.required, Validators.minLength(11), Validators.maxLength(14), Validate.onlyNumber]),
     nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     password: new FormControl('Alterar@123', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]),
-    confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.matchValues('password')]),
+    confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.match('password')]),
     optin: new FormControl(true, [Validators.required]),
   });
 

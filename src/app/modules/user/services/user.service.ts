@@ -2,24 +2,24 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, delay, finalize, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import { SexesOrientationMock } from './mock/sexes-orientation.mock';
-import { SexesMock } from './mock/sexes.mock';
-import { GendersMock } from './mock/genders.mock';
 import { ExpressionsGenderMock } from './mock/expressions-gender.mock';
+import { SexesOrientationMock } from './mock/sexes-orientation.mock';
+import { ExpressionGender } from '../models/expression-gender.model';
 import { GendersIdentityMock } from './mock/genders-identity.mock';
+import { SexOrientation } from '../models/sex-orientation.model';
+import { GenderIdentity } from '../models/gender-identity.model';
+import { CurrenciesMock } from './mock/currencies.mock';
 import { CountriesMock } from './mock/countries.mock';
 import { LanguagesMock } from './mock/languages.mock';
 import { TimezonesMock } from './mock/timezones.mock';
-import { CurrenciesMock } from './mock/currencies.mock';
-import { Country } from '../models/country.model';
 import { Language } from '../models/language.model';
 import { Timezone } from '../models/timezone.model';
 import { Currency } from '../models/currency.model';
-import { Sex } from '../models/sex.model';
+import { GendersMock } from './mock/genders.mock';
+import { Country } from '../models/country.model';
 import { Gender } from '../models/gender.model';
-import { GenderIdentity } from '../models/gender-identity.model';
-import { SexOrientation } from '../models/sex-orientation.model';
-import { ExpressionGender } from '../models/expression-gender.model';
+import { SexesMock } from './mock/sexes.mock';
+import { Sex } from '../models/sex.model';
 @Injectable({
   providedIn: 'root',
 })

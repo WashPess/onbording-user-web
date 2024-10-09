@@ -3,11 +3,16 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 export class Validate {
 
-  public static matchValues(matchTo: string): (arg0: AbstractControl) => ValidationErrors | null {
+  static DomainReg = /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  static OnlyNumber = /^\d+$/;
+
+  public static match(matchTo: string): (arg0: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
+
 
       const { parent, value } = control;
       const { controls: parentControls, value: parentValue }: any = parent || {};
+
 
       if(
         !parent
@@ -18,10 +23,32 @@ export class Validate {
         || !value
         || value !== parentControls[matchTo].value
       ) {
-        return { isMatching: false };
+        return { match: true };
       }
 
       return null;
     };
   }
+
+  public static get hasDomain(): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const { value } = control;
+      if(!Validate.DomainReg.test(value)) {
+        return { hasdomain: String(value).includes('@') };
+      }
+      return null;
+    };
+  }
+
+  public static get onlyNumber(): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const { value } = control;
+
+      if(!Validate.OnlyNumber.test(value)) {
+        return { onlynumber: true };
+      }
+      return null;
+    };
+  }
+
 }
