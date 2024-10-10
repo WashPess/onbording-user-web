@@ -39,9 +39,17 @@ export class FormComponent implements OnDestroy {
 
   public save() {
 
+    this.userForm.get('optin')?.updateValueAndValidity();
+    const control = this.userForm.get('optin')?.invalid;
+
     // if(this.userForm.invalid) {
+    //   this.notify('danger', 'Formulário inválido');
     //   return;
     // }
+
+    // console.log("SEND: ", this.userForm.invalid, control);
+
+    // return
 
     const user = this.userForm.value;
     console.log("SAVE", user, this.userForm.valid);

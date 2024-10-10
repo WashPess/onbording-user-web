@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Pipe } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription, tap } from 'rxjs';
-
 
 import { ExpressionGender } from '../../models/expression-gender.model';
 import { GenderIdentity } from '../../models/gender-identity.model';
@@ -24,7 +23,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   @Output() changeForm = new EventEmitter<FormGroup>();
 
-  private unsubscriptions$: Subscription[] = <Subscription[]>[];
+  private readonly unsubscriptions$: Subscription[] = <Subscription[]>[];
 
   public loadingExpressionsGender$: Observable<boolean> = of(false);
   public loadingSexesOrientation$: Observable<boolean> = of(false);
@@ -87,7 +86,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     password: new FormControl('Alterar@123', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]),
     confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.match('password')]),
-    optin: new FormControl(true, [Validators.required]),
+    optin: new FormControl(false, [Validate.isTrue]),
   });
 
   public formGender = new FormGroup({
@@ -282,6 +281,12 @@ export class UserFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  // public changeOptin() {
+  //   this.form.get('optin')?.valueChanges.subscribe((value: any) => {
+  //     console.log('OPTIN: ', value);
+  //   });
+  // }
+
   public hasError(item: any): boolean {
     if(!item) {
       return false;
@@ -292,3 +297,4 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
 }
+

@@ -51,4 +51,17 @@ export class Validate {
     };
   }
 
+  public static get isTrue(): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const { value } = control;
+      const val = value === true
+
+      if(control?.dirty && !val) {
+        return { istrue: true };
+      }
+
+      return null;
+    };
+  }
+
 }
