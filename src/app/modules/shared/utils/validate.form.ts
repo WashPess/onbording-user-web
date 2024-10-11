@@ -3,8 +3,10 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 export class Validate {
 
-  static DomainReg = /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  static OnlyNumber = /^\d+$/;
+  static readonly DomainReg = /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  static readonly OnlyNumber = /^\d+$/;
+  static readonly OnlyLetters = /^[A-Za-zÀ-ÿ\s]+$/;
+
 
   public static match(matchTo: string): (arg0: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -47,6 +49,21 @@ export class Validate {
       if(!Validate.OnlyNumber.test(value)) {
         return { onlynumber: true };
       }
+      return null;
+    };
+  }
+
+  public static get onlyLetters(): (arg0: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const { value, errors }: any = control;
+
+      const size = value ? String(value).trim().length : 0;
+      const sizeErrors = errors && typeof errors == 'object' ?  Object.keys(errors).length : 0;
+
+      if(sizeErrors == 0 && size > 0 && !Validate.OnlyLetters.test(value)) {
+        return { onlyletters: true };
+      }
+
       return null;
     };
   }

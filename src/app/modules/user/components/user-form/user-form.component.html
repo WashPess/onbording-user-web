@@ -19,6 +19,7 @@
         <div *ngIf="firstName?.errors?.['required']">É necessario preencher o primeiro nome.</div>
         <div *ngIf="firstName?.errors?.['minlength']"> Primeiro nome deve conter no minimo 2 caracteres. </div>
         <div *ngIf="firstName?.errors?.['maxlength']"> O nome deve conter no máximo 30 caracteres.</div>
+        <div *ngIf="firstName?.errors?.['onlyletters']"> O nome deve conter somente letras.</div>
       </div>
 
     </div>
@@ -36,6 +37,7 @@
         <div *ngIf="lastName?.errors?.['required']">É necessario preencher o ultimo nome.</div>
         <div *ngIf="lastName?.errors?.['minlength']"> O ultimo nome deve conter no minimo 2 caracteres. </div>
         <div *ngIf="lastName?.errors?.['maxlength']"> O ultimo nome deve conter no máximo 30 caracteres.</div>
+        <div *ngIf="lastName?.errors?.['onlyletters']"> O último deve conter somente letras.</div>
       </div>
     </div>
   </div>

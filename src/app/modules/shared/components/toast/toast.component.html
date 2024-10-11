@@ -1,0 +1,26 @@
+
+<div class="border border-danger">
+  <ng-container *ngFor="let notice of observers">
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1000 !important">
+      <div
+        class="toast bg-{{notice.type}}-subtle border-{{notice.type}}-subtle"
+        [ngClass]="{ 'show': notice.active, 'hide': !notice.active }"
+        aria-live="assertive"
+        aria-atomic="true"
+        role="alert"
+      >
+        <div class="toast-header d-flex justify-content-between" >
+          <div class="flex-fill">
+            <span>{{notice.title}}</span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          <span>{{notice.message}}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+

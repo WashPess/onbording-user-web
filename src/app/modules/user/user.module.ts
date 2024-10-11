@@ -5,13 +5,12 @@ import { UserRoutingModule } from "./user-routing.module";
 import { UserComponent } from './user.component';
 
 import { FormComponent } from "./pages";
-import { UserFormComponent, ToastComponent } from "./components";
+import { UserFormComponent } from "./components";
 
 @NgModule({
 	declarations: [
 		UserComponent,
 		FormComponent,
-		ToastComponent,
 		UserFormComponent,
 	],
 	imports: [

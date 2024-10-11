@@ -8,8 +8,12 @@ import { RouterModule } from '@angular/router';
 import { NgbModule, NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
+import { ToastComponent } from "./components";
+
 @NgModule ({
-  declarations: [],
+  declarations: [
+    ToastComponent
+  ],
   imports: [
     NgFor,
     JsonPipe,
@@ -32,6 +36,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     NgbToastModule,
     BsDropdownModule,
     ReactiveFormsModule,
+    ToastComponent,
   ]
 })
 export class SharedModule {}
