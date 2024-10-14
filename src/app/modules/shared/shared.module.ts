@@ -10,9 +10,12 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { ToastComponent } from "./components";
 
+import { DocumentMaskDirective } from './directives';
+
 @NgModule ({
   declarations: [
-    ToastComponent
+    ToastComponent,
+    DocumentMaskDirective,
   ],
   imports: [
     NgFor,
@@ -37,6 +40,7 @@ import { ToastComponent } from "./components";
     BsDropdownModule,
     ReactiveFormsModule,
     ToastComponent,
+    DocumentMaskDirective,
   ]
 })
 export class SharedModule {}

@@ -3,21 +3,20 @@ import { FormGroup } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { finalize, of, Subscription } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ToastService } from "../../../shared/components/toast/toast.service";
 
 
 @Component({
-	selector: 'app-form',
-	templateUrl: './form.component.html',
-	styleUrls: ['./form.component.scss']
+	selector: 'app-users-registers',
+	templateUrl: './users-registers.component.html',
+	styleUrls: ['./users-registers.component.scss']
 })
-export class FormComponent implements OnDestroy {
+export class UsersRegistersComponent implements OnDestroy {
 
-  private unsubscribe$: Subscription[] = <Subscription[]>[];
+  private readonly unsubscribe$: Subscription[] = <Subscription[]>[];
 
   public loadingSave$ = of(false);
   public message = '';
-  public type: 'danger' | 'success' = 'danger';
-  public observers: any[] = [];
 
   public get isVisibleError(): boolean {
     return String(this.message).length > 0;
@@ -25,8 +24,10 @@ export class FormComponent implements OnDestroy {
 
   public userForm = new FormGroup({});
 
-  constructor(private userService: UserService) {
+  constructor(private readonly userService: UserService, private readonly toastService: ToastService) {
     this.loadingSave$ = this.userService.loadingSave$;
+
+    this.toastService.error("ERRO de teste")
   }
 
   ngOnDestroy() {
@@ -60,12 +61,12 @@ export class FormComponent implements OnDestroy {
       finalize(()=> this.userForm.enable()),
     ).subscribe({
       next: (a: any)=> {
-        console.log("SAVED: ", a)
-        this.notify('success', 'Usuário criado com sucesso');
+        console.log("SAVED: ", a);
+        this.toastService.success("Usuário salvo com sucesso");
       },
       error: (err: HttpErrorResponse)=> {
         const { error : { message } } = err;
-        this.notify('danger', message);
+        this.toastService.error("Erro ao tentar salvar usuário");
         console.log("ERROR: ", err);
       },
       complete: ()=> this.message = '',
@@ -78,16 +79,6 @@ export class FormComponent implements OnDestroy {
     this.userForm.reset();
   }
 
-  private notify(type: 'success' | 'danger', message: string) {
-    this.observers.push({ type, message });
-  }
 
-  public unnotify(status: boolean, notice: any) {
-    if(!status) {
-      return;
-    }
-
-    this.observers = this.observers.filter((o: any)=> o !== notice);
-  }
 
 }

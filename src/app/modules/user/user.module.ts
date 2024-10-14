@@ -4,14 +4,14 @@ import { SharedModule } from "../shared/shared.module";
 import { UserRoutingModule } from "./user-routing.module";
 import { UserComponent } from './user.component';
 
-import { FormComponent } from "./pages";
+import { UsersRegistersComponent } from "./pages";
 import { UserFormComponent } from "./components";
 
 @NgModule({
 	declarations: [
 		UserComponent,
-		FormComponent,
 		UserFormComponent,
+		UsersRegistersComponent,
 	],
 	imports: [
 		UserRoutingModule,
@@ -20,7 +20,8 @@ import { UserFormComponent } from "./components";
 	exports: [
 		UserRoutingModule,
 		SharedModule,
-		FormComponent,
+
+		UsersRegistersComponent,
 	]
 })
 export class UserModule {}

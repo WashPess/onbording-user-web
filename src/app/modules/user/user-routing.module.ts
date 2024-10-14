@@ -2,14 +2,14 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { UserComponent } from "./user.component";
-import { FormComponent } from "./pages";
+import { UsersRegistersComponent } from "./pages";
 
 const routes: Routes = <Routes>[
-	{ 
-		path: '', 
+	{
+		path: '',
 		component: UserComponent,
 		children: [
-			{ path: '',  component: FormComponent }
+			{ path: '',  component: UsersRegistersComponent }
 		]
 
 	 },

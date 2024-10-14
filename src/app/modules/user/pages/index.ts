@@ -1,2 +1,2 @@
 
-export * from './form/form.component';
+export * from './users-registers/users-registers.component';

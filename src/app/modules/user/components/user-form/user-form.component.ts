@@ -71,7 +71,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     firstName: new FormControl('Max', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
     lastName: new FormControl('Smitch', [Validators.required, Validators.minLength(2),  Validators.maxLength(30), Validate.onlyLetters]),
     email: new FormControl('email@email.com', [Validators.required, Validators.email, Validate.hasDomain]),
-    document: new FormControl('75146970041', [Validators.required, Validators.minLength(11), Validators.maxLength(14), Validate.onlyNumber]),
+    document: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(19), Validate.onlyNumber]),
     nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     password: new FormControl('Alterar@123', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]),
     confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.match('password')]),
@@ -87,7 +87,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   })
 
   // DI - dependance injection
-  constructor(private userService: UserService, private genderService: GenderService) {
+  constructor(private readonly userService: UserService, private readonly genderService: GenderService) {
     this.loadingExpressionsGender$ = this.genderService.loadingExpressionsGender$;
     this.loadingSexesOrientation$ = this.genderService.loadingSexesOrientation$;
     this.loadingGendersIdentity$ = this.genderService.loadingGendersIdentity$;

@@ -1,35 +1,27 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { ToastNotify, ToastService } from "./toast.service";
+import { Observable, of } from "rxjs";
 
 @Component({
   selector: 'app-toast',
   templateUrl: './toast.component.html'
 })
-export class ToastComponent {
+export class ToastComponent implements OnInit {
 
-  public state: 'actived' | 'hided' | 'freezed' = 'hided';
-  public activeLocal = false;
+  public observers: ToastNotify[] = <ToastNotify[]>[];
+  private readonly observers$: Observable<ToastNotify[]> = of(<ToastNotify[]>[]);
 
-  @Input() set active(active: boolean) {
-    this.activeLocal = active;
-    this.hideToast();
-  };
+  constructor(private readonly toastService: ToastService) {
+    this.observers$ = toastService.observables$;
+  }
 
-  @Input() title = "";
-  @Input() message = "";
-  @Input() type: 'success' | 'danger' | 'info' | 'warning' | 'primary' | 'secondary' | 'default' = 'info';
-  @Input() delay = 6000;
+  ngOnInit() {
+    this.changeObservers();
+  }
 
-  @Output() hidedChange = new EventEmitter<boolean>(false);
-
-  private hideToast() {
-    if(this.activeLocal && this.state !== 'freezed') {
-      this.state = 'freezed';
-      this.hidedChange.emit(false);
-      setTimeout(()=> {
-        this.activeLocal = false;
-        this.state = 'hided';
-        this.hidedChange.emit(true);
-      }, this.delay);
-    }
+  private changeObservers() {
+    this.observers$.subscribe((observers: ToastNotify[])=> {
+      this.observers = observers;
+    })
   }
 }

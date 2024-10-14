@@ -4,7 +4,7 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
 export class Validate {
 
   static readonly DomainReg = /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  static readonly OnlyNumber = /^\d+$/;
+  static readonly OnlyNumber = /^[\d.\-/_]+$/;
   static readonly OnlyLetters = /^[A-Za-zÀ-ÿ\s]+$/;
 
 

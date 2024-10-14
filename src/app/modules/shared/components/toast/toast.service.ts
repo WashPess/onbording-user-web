@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 export type TypeNotify = 'success' | 'danger' | 'info' | 'warning' | 'primary' | 'secondary' | 'default';
 
@@ -11,6 +11,11 @@ export interface ToastNotify {
   message: string,
 }
 
+export interface TimeControl {
+  state: boolean,
+  notice: ToastNotify,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +23,13 @@ export class ToastService {
 
   public delay: number = 6000;
   public observers: ToastNotify[] = <ToastNotify[]>[];
-  public hide = new BehaviorSubject<boolean>(false)
+
+  public observers$ = new BehaviorSubject<ToastNotify[]>(<ToastNotify[]>[]);
+  public get observables$(): Observable<ToastNotify[]> {
+    return this.observers$.asObservable();
+  }
+
+  public hide = new BehaviorSubject<TimeControl>(<TimeControl>{})
   public get hided() {
     return this.hide.asObservable();
   }
@@ -32,37 +43,41 @@ export class ToastService {
     this.notify('success', 'Sucesso', msg, delay);
   }
 
-  public error(msg: string) {
-    this.notify('danger', 'Erro', msg);
+  public error(msg: string, delay: number = 0) {
+    delay = delay || this.delay;
+    this.notify('danger', 'Erro', msg, delay);
   }
 
   public info(msg: string, delay: number = 0) {
     delay = delay || this.delay;
-    this.notify('info', 'Info', msg);
+    this.notify('info', 'Info', msg, delay);
   }
 
   public warning(msg: string, delay: number = 0) {
     delay = delay || this.delay;
-    this.notify('warning', 'Warning', msg);
+    this.notify('warning', 'Warning', msg, delay);
   }
 
   public message(msg: string, delay: number = 0) {
     delay = delay || this.delay;
-    this.notify('primary', 'Primary', msg);
+    this.notify('primary', 'Primary', msg, delay);
   }
 
   public context(msg: string, delay: number = 0) {
     delay = delay || this.delay;
-    this.notify('secondary', 'Secondary', msg);
+    this.notify('secondary', 'Secondary', msg, delay);
   }
 
   public default(msg: string, delay: number = 0) {
     delay = delay || this.delay;
-    this.notify('default', 'Default', msg);
+    this.notify('default', 'Default', msg, delay);
   }
 
   private notify(type: TypeNotify, title: string, message: string, delay: number = 6000, active: boolean = true) {
-    this.observers.push(<ToastNotify>{ type, title, message, delay, active });
+    const notice = <ToastNotify>{ type, title, message, delay, active };
+    this.observers.push(notice);
+    this.timeControl(notice);
+    this.observers$.next(this.observers);
   }
 
   public unnotify(status: boolean, notice: ToastNotify) {
@@ -71,16 +86,17 @@ export class ToastService {
     }
 
     this.observers = this.observers.filter((o: any)=> o !== notice);
+    this.observers$.next(this.observers);
   }
 
   private changeHided() {
-    this.hided.subscribe((state: boolean)=> {
-      this.unnotify(state, <ToastNotify>{})
+    this.hided.subscribe((timeControl: TimeControl)=> {
+      this.unnotify(timeControl.state, timeControl.notice)
     })
   }
 
+  private timeControl(notice: ToastNotify) {
+    setTimeout(() => this.hide.next(<TimeControl>{ state: true, notice }), notice.delay);
+  }
+
 }
-
-
-// this.toastService.success("asdfasdfasdf")
-// this.toastService.error("asdfasdfasdf")
