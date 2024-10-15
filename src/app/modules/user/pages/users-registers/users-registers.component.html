@@ -1,34 +1,4 @@
 
-<div class="card shadow rounded-4 mx-4">
-
-  <div class="card-header p-4">
-    <h4 class="p-0 m-0 px-2">Profile Details</h4>
-  </div>
-
-  <div class="card-body m-0 p-4">
-    <app-user-form (changeForm)="changesUserForm($event)"></app-user-form>
-  </div>
-
-  <div class="card-footer p-4">
-    <div class="d-flex justify-content-end gap-2">
-
-      <button class="btn btn-light border text-muted" (click)="reset()">Discard</button>
-
-      <button class="btn btn-primary" (click)="save()" [disabled]="(loadingSave$ | async)">
-
-        <ng-container *ngIf="!(loadingSave$ | async)">
-          <span>Save Changes</span>
-        </ng-container>
-
-        <ng-container *ngIf="(loadingSave$ | async)">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          <span class="visually-hidden">Loading...</span>
-          <span class="ms-2">Awaiting...</span>
-        </ng-container>
-
-      </button>
-
-    </div>
-  </div>
-
+<div class="">
+  <app-user-form></app-user-form>
 </div>

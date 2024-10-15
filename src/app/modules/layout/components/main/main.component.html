@@ -1,31 +1,13 @@
-<main class="row p-0 m-0">
-  
+<main class="row p-0 m-0 border">
+
   <div id="content-aside" class="col-12 col-lg-4 p-0 m-0">
     <app-aside></app-aside>
   </div>
-  
+
   <div id="content-sections" class="col-12 col-lg-8 p-0 m-0">
-    
-    <section>
+
+    <section class="pt-4 pe-1">
       <router-outlet></router-outlet>
-    </section>
-
-    <section>
-      <h1>Sessão espacial</h1>
-
-      <ng-container *ngFor="let article of articles">
-        <div class="content-article">
-          <app-article [title]="article.title" [content]="article.content" [link]="article.link"></app-article>
-        </div>
-      </ng-container>
-
-    </section>
-
-    <section>
-      <h1>Fofoca</h1>
-      <div class="content-article">
-        <app-article title="Obeiço da cantora Y tá torto" content="Conteudo3" link="https://mussumipsum.com/_next/static/media/bg_home.fb320b8f.jpg"></app-article>
-      </div>
     </section>
 
   </div>
