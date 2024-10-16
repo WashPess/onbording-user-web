@@ -1,0 +1,39 @@
+<div class="table-responsive shadow border rounded-4 p-4 bg-white">
+
+  <div class="border-bottom mb-4 pb-3 d-flex flex-row justify-content-between">
+    <div>
+      <h3>Lista de usuários</h3>
+    </div>
+    <div>
+
+      <form [formGroup]="form">
+        <div class="input-group input-group">
+          <input type="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" formControlName="search">
+          <span class="input-group-text" id="inputGroup-sizing"><i class="bi bi-search"></i></span>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Email</th>
+        <th scope="col">Documento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let user of usersFiltred; let i = index;">
+        <tr>
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.document }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
