@@ -1,20 +1,20 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, delay, finalize, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, finalize, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
 
-  private endpointV1 = 'http://127.0.0.1:9090';
+  private readonly endpointV1 = 'http://127.0.0.1:9090';
 
-  private _loadingSave = new BehaviorSubject<boolean>(false);
+  private readonly _loadingSave = new BehaviorSubject<boolean>(false);
   public get loadingSave$(): Observable<boolean> {
     return this._loadingSave.asObservable();
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   public save(user: any): Observable<any> {
 

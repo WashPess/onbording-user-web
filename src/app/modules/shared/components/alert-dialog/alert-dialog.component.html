@@ -1,0 +1,22 @@
+<div class="m-0 p-0 d-block border border-danger">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header d-flex justify-content-between">
+        <h5 class="modal-title">
+          <span [innerHTML]="title">title</span>
+        </h5>
+        <button type="button" class="btn-close me-1"></button>
+      </div>
+
+      <div class="modal-body">
+        <p [innerHTML]="message"></p>
+      </div>
+      <div class="modal-footer gap-2">
+        <button type="button" class="btn btn-secondary">{{ cancelLabel }}</button>
+        <button type="button" class="btn btn-primary">{{ confirmLabel }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+

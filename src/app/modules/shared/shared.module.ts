@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 
-import { CommonModule, NgFor, JsonPipe } from "@angular/common";
+import { CommonModule, JsonPipe, NgFor } from "@angular/common";
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -8,13 +8,14 @@ import { RouterModule } from '@angular/router';
 import { NgbModule, NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
-import { ToastComponent } from "./components";
+import { AlertDialogComponent, ToastComponent } from "./components";
 
 import { DocumentMaskDirective } from './directives';
 
 @NgModule ({
   declarations: [
     ToastComponent,
+    AlertDialogComponent,
     DocumentMaskDirective,
   ],
   imports: [
@@ -39,8 +40,10 @@ import { DocumentMaskDirective } from './directives';
     NgbToastModule,
     BsDropdownModule,
     ReactiveFormsModule,
-    ToastComponent,
     DocumentMaskDirective,
+
+    ToastComponent,
+    AlertDialogComponent,
   ]
 })
 export class SharedModule {}

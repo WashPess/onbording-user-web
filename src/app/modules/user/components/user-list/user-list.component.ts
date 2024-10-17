@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs';
+import { AlertDialogService } from '../../../shared/components/alert-dialog/alert-dialog.service';
+import { UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
   selector: 'app-user-list',
@@ -24,6 +27,11 @@ export class UserListComponent implements OnInit {
     { name: 'qwert F', email: 'qwertf@qwert.com', document: '000.000.00-05' },
   ];
 
+  constructor(
+    private readonly modal: NgbModal,
+    private readonly alertDialogService: AlertDialogService,
+  ) {}
+
   ngOnInit(): void {
     this.changeSearch();
   }
@@ -34,10 +42,10 @@ export class UserListComponent implements OnInit {
     .pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      tap((term: any)=> !term ? (this.usersFiltred = this.filterUsers('', this.users)) : ''),
+      tap((term: any)=> !term ? this.filterUsers('', this.users) : ''),
       filter((value: any)=> value),
       filter((value: any)=> String(value).length >= 3),
-      tap((term: string)=> this.usersFiltred = this.filterUsers(term, this.users)),
+      tap((term: string)=> this.filterUsers(term, this.users)),
       tap((a: any)=> console.log("TAP: ", a)),
     ).subscribe()
   }
@@ -49,11 +57,42 @@ export class UserListComponent implements OnInit {
 
   private filterUsers(term: string, users: any[]): any[] {
     if(!term) {
-      return users;
+      this.usersFiltred = users;
+      return this.usersFiltred;
     }
+
     term = String(term).toLowerCase().trim();
-    return users.filter((user: any)=> JSON.stringify(user).toLowerCase().includes(term))
+    this.usersFiltred = users.filter((user: any)=> JSON.stringify(user).toLowerCase().includes(term))
+
+    return this.usersFiltred;
   }
+
+
+  public openUserForm(user: any) {
+
+    const modal = this.modal.open(UserFormComponent, { size: 'xl' });
+    modal.componentInstance.mode = "edit"
+    modal.componentInstance.user = user;
+
+    modal.closed.subscribe(()=> {
+      console.log("FOI FECHADO")
+    })
+
+    modal.dismissed.subscribe(()=> {
+      console.log("FOI ABANDONADO")
+    })
+
+    console.log("formulário aberto")
+  }
+
+  public deleteUser() {
+    console.log("delete de usuário");
+    this.alertDialogService.openAlertDialog()
+
+  }
+
+
+
 
 }
 
