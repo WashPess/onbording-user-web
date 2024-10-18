@@ -17,6 +17,8 @@ export class AlertDialogService {
 
     const modal = this.modal.open(AlertDialogComponent, { size: 'xl' });
 
+    modal.componentInstance.type="danger"
+
     modal.closed.subscribe(()=> {
       console.log("FOI FECHADO")
     })

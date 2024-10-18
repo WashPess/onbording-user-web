@@ -1,20 +1,43 @@
-<div class="m-0 p-0 d-block border border-danger">
-  <div class="modal-dialog">
+<div class="m-0 p-0 d-block border border-{{alertColor}}">
+  <div class="m-0 p-0 modal-dialog border-0">
     <div class="modal-content">
 
       <div class="modal-header d-flex justify-content-between">
-        <h5 class="modal-title">
-          <span [innerHTML]="title">title</span>
-        </h5>
-        <button type="button" class="btn-close me-1"></button>
+
+        <ng-container *ngIf="isFillTitle" >
+          <h5 class="modal-title d-flex flex-fill justify-content-{{positionDialog}}">
+
+            <ng-container *ngIf="hasIcon">
+              <span class="me-2 text-{{alertColor}}">
+                <i class="bi" [ngClass]="iconTitle"></i>
+              </span>
+            </ng-container>
+
+            <span [innerHTML]="title" class="" >...</span>
+
+          </h5>
+        </ng-container>
+
+        <button type="button" class="btn-close ms-auto"></button>
+
       </div>
 
       <div class="modal-body">
-        <p [innerHTML]="message"></p>
+        <ng-container *ngIf="isFillMessage">
+          <p [innerHTML]="message">...</p>
+        </ng-container>
       </div>
+
       <div class="modal-footer gap-2">
-        <button type="button" class="btn btn-secondary">{{ cancelLabel }}</button>
-        <button type="button" class="btn btn-primary">{{ confirmLabel }}</button>
+
+        <ng-container *ngIf="isFillCancelLabel">
+          <button type="button" class="btn btn-secondary">{{ cancelLabel }}</button>
+        </ng-container>
+
+        <ng-container *ngIf="isFillConfirmLabel">
+          <button type="button" class="btn btn-primary">{{ confirmLabel }}</button>
+        </ng-container>
+
       </div>
     </div>
   </div>
