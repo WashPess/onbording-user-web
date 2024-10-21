@@ -67,7 +67,6 @@ export class UserListComponent implements OnInit {
     return this.usersFiltred;
   }
 
-
   public openUserForm(user: any) {
 
     const modal = this.modal.open(UserFormComponent, { size: 'xl' });
@@ -87,12 +86,18 @@ export class UserListComponent implements OnInit {
 
   public deleteUser() {
     console.log("delete de usuário");
-    this.alertDialogService.openAlertDialog()
-
+    this.alertDialogService.openAlertDialog(
+      'danger',
+      'Deletar Usuário',
+      'Tem certeza que deseja deletar o Usuário???',
+      'Deletar',
+      'Cancelar',
+      'center',
+      false
+    ).subscribe((state: boolean)=> {
+      console.log("DELETAR USUÀRIO: ", state);
+    });
   }
-
-
-
 
 }
 

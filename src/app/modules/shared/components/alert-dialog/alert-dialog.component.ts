@@ -1,4 +1,5 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Optional } from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 export type TypeDialog = 'message' | 'success' | 'danger' | 'info' | 'warning' | 'primary' | 'second';
 export type PositionDialog = 'start' | 'center' | 'end';
@@ -23,10 +24,14 @@ export class AlertDialogComponent {
   @Input() title = ``;
   @Input() message = ``;
   @Input() cancelLabel = "Cancelar";
+  @Input() hideIcon: boolean = false;
   @Input() confirmLabel = "Confirmar";
   @Input() type: TypeDialog = "message";
-  @Input() hideIcon: boolean = false;
   @Input() position: PositionDialog = "start";
+
+  public state: boolean | undefined = undefined;
+
+  constructor(@Optional() private readonly activeModal: NgbActiveModal ) {}
 
   public get isFillTitle(): boolean {
     return  String(this.title ?? '').length > 0;
@@ -60,8 +65,22 @@ export class AlertDialogComponent {
     return !this.hideIcon && String(this.iconTitle).length > 0;
   }
 
-  // public close() {
+  public confirm() {
+    this.state = true;
+    this.close();
+  }
 
-  // }
+  public cancel() {
+    this.state = false;
+    this.close();
+  }
+
+  public dismiss() {
+    this.activeModal.dismiss();
+  }
+
+  private close() {
+    this.activeModal.close(this.state);
+  }
 
 }

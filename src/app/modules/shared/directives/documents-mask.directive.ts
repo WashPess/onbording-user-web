@@ -1,4 +1,4 @@
-import { Directive, HostListener, ElementRef } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
@@ -10,6 +10,7 @@ export class DocumentMaskDirective {
 
   @HostListener('input', ['$event'])
   onInputChange(event: any): void {
+
     let value = this.el.nativeElement.value.replace(/\D/g, ''); // Remove tudo que não é número
 
     if (!value) {

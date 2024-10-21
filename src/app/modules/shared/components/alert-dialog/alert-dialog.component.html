@@ -1,5 +1,5 @@
-<div class="m-0 p-0 d-block border border-{{alertColor}}">
-  <div class="m-0 p-0 modal-dialog border-0">
+<div class="m-0 p-0 d-block border-0">
+  <div class="m-0 p-0 modal-dialog border-5">
     <div class="modal-content">
 
       <div class="modal-header d-flex justify-content-between">
@@ -18,7 +18,7 @@
           </h5>
         </ng-container>
 
-        <button type="button" class="btn-close ms-auto"></button>
+        <button type="button" class="btn-close ms-auto" (click)="dismiss()"></button>
 
       </div>
 
@@ -31,11 +31,11 @@
       <div class="modal-footer gap-2">
 
         <ng-container *ngIf="isFillCancelLabel">
-          <button type="button" class="btn btn-secondary">{{ cancelLabel }}</button>
+          <button type="button" class="btn btn-secondary" (click)="cancel()">{{ cancelLabel }}</button>
         </ng-container>
 
         <ng-container *ngIf="isFillConfirmLabel">
-          <button type="button" class="btn btn-primary">{{ confirmLabel }}</button>
+          <button type="button" class="btn btn-primary" (click)="confirm()">{{ confirmLabel }}</button>
         </ng-container>
 
       </div>
