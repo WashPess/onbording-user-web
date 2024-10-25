@@ -28,5 +28,14 @@ export class UserService {
     );
   }
 
+  public list(): Observable<any> {
+    const url = `${this.endpointV1}/users`;
+    this._loadingSave.next(true);
+    return this.http.get(url)
+    .pipe(
+      finalize(() => this._loadingSave.next(false)),
+    );
+  }
+
 
 }

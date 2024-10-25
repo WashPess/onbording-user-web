@@ -118,69 +118,77 @@
 
       </div>
 
-      <div class="col-4 mb-3">
-        <label class="form-label">Password <span class="text-danger">*</span></label>
-      </div>
-
-      <div class="col-8 mb-3">
-        <input
-          type="text"
-          name="password"
-          placeholder="***"
-          class="form-control"
-          formControlName="password"
-          [ngClass]="{ 'is-invalid': hasError(password?.errors) }"
-
-        >
-
-        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="form-text text-danger">
-          <div *ngIf="password?.errors?.['required']">É necessario preencher a senha.</div>
-          <div *ngIf="password?.errors?.['pattern']">A senha deve conter letras maiusculas, minusculas, números e caracteres especiais.</div>
+      <ng-container *ngIf="!isModeEdit" >
+        <div class="col-4 mb-3">
+          <label class="form-label">Password <span class="text-danger">*</span></label>
         </div>
-      </div>
 
-      <div class="col-4 mb-3">
-        <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
-      </div>
-
-      <div class="col-8 mb-3">
-        <input
-          type="text"
-          placeholder="***"
-          class="form-control"
-          name="confirmPassword"
-          formControlName="confirmPassword"
-          [ngClass]="{ 'is-invalid': hasError(confirmPassword?.errors) }"
-        >
-        <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)" class="form-text text-danger">
-          <div *ngIf="confirmPassword?.errors?.['required']">É necessario preencher a confirmaçao da senha nome.</div>
-          <div *ngIf="confirmPassword?.errors?.['match']"> A confirmação e a senha não combinam. </div>
-        </div>
-      </div>
-
-      <div class="col-4 mb-3">
-        <label class="form-label">Accept terms<span class="text-danger">*</span></label>
-      </div>
-
-      <div class="col-8 mb-3">
-        <div class="form-check">
+        <div class="col-8 mb-3">
           <input
-            name="optin"
-            type="checkbox"
-            id="optin-terms"
-            formControlName="optin"
-            class="form-check-input"
+            type="text"
+            name="password"
+            placeholder="***"
+            class="form-control"
+            formControlName="password"
+            [ngClass]="{ 'is-invalid': hasError(password?.errors) }"
+
           >
-          <label class="form-check-label" for="optin-terms">
-            Accept
-          </label>
+
+          <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="form-text text-danger">
+            <div *ngIf="password?.errors?.['required']">É necessario preencher a senha.</div>
+            <div *ngIf="password?.errors?.['pattern']">A senha deve conter letras maiusculas, minusculas, números e caracteres especiais.</div>
+          </div>
+        </div>
+      </ng-container>
+
+
+      <ng-container *ngIf="!isModeEdit">
+        <div class="col-4 mb-3">
+          <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
         </div>
 
-        <div *ngIf="true" class="form-text text-danger">
-          <div *ngIf="optin?.errors?.['istrue']">É necessario aceitar os termos.</div>
+        <div class="col-8 mb-3">
+          <input
+            type="text"
+            placeholder="***"
+            class="form-control"
+            name="confirmPassword"
+            formControlName="confirmPassword"
+            [ngClass]="{ 'is-invalid': hasError(confirmPassword?.errors) }"
+          >
+          <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)" class="form-text text-danger">
+            <div *ngIf="confirmPassword?.errors?.['required']">É necessario preencher a confirmaçao da senha nome.</div>
+            <div *ngIf="confirmPassword?.errors?.['match']"> A confirmação e a senha não combinam. </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isModeEdit">
+        <div class="col-4 mb-3">
+          <label class="form-label">Accept terms<span class="text-danger">*</span></label>
         </div>
 
-      </div>
+        <div class="col-8 mb-3">
+          <div class="form-check">
+            <input
+              name="optin"
+              type="checkbox"
+              id="optin-terms"
+              formControlName="optin"
+              class="form-check-input"
+            >
+            <label class="form-check-label" for="optin-terms">
+              Accept
+            </label>
+          </div>
+
+          <div *ngIf="true" class="form-text text-danger">
+            <div *ngIf="optin?.errors?.['istrue']">É necessario aceitar os termos.</div>
+          </div>
+
+        </div>
+      </ng-container>
+
 
     </form>
 

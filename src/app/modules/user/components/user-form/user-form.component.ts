@@ -1,17 +1,15 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { finalize, Observable, of, Subscription, tap } from 'rxjs';
+import { finalize, of, Subscription } from 'rxjs';
 
-import { ExpressionGender } from '../../models/expression-gender.model';
-import { GenderIdentity } from '../../models/gender-identity.model';
-import { SexOrientation } from '../../models/sex-orientation.model';
-import { Validate } from '../../../shared/utils/validate.form';
-import { UserService } from '../../services/user.service';
-import { Gender } from '../../models/gender.model';
-import { Sex } from '../../models/sex.model';
-import { GenderService } from '../../services/gender.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../../../shared/components/toast/toast.service';
+import { Validate } from '../../../shared/utils/validate.form';
+import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
+
+
+export type TypeForm = 'create' | 'edit'
 
 @Component({
   selector: 'app-user-form',
@@ -20,10 +18,31 @@ import { ToastService } from '../../../shared/components/toast/toast.service';
 })
 export class UserFormComponent implements OnInit, OnDestroy {
 
+  @Input() user: User = <User>{};
+
+  @Input() set mode(mode: TypeForm) {
+    this.modeLocal = mode;
+    // this.defineValidators();
+  }
+
   @Output() changeForm = new EventEmitter<FormGroup>();
 
   private readonly unsubscriptions$: Subscription[] = <Subscription[]>[];
   public loadingSave$ = of(false);
+
+  public modeLocal: TypeForm = 'create'
+
+  public get isModeEdit(): boolean {
+    return this.modeLocal == 'edit';
+  }
+
+  public get isModeCreate(): boolean {
+    return this.modeLocal == 'create';
+  }
+
+  private get hasUser(): boolean {
+    return Object.keys(this.user).length > 0;
+  }
 
   public get firstName() {
     return this.form.get('firstName');
@@ -57,15 +76,19 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return this.form.get('optin');
   }
 
+  private readonly validatorsPassword = [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)];
+  private readonly validatorsConfirmPassword = [Validators.required, Validate.match('password')];
+  private readonly validatorsOptin = [Validate.isTrue];
+
   public form = new FormGroup({
-    firstName: new FormControl('Max', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
-    lastName: new FormControl('Smitch', [Validators.required, Validators.minLength(2),  Validators.maxLength(30), Validate.onlyLetters]),
-    email: new FormControl('email@email.com', [Validators.required, Validators.email, Validate.hasDomain]),
-    document: new FormControl('09761069000102', [Validators.required, Validators.minLength(11), Validators.maxLength(19), Validate.onlyNumber]),
-    nickname: new FormControl('max1024', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-    password: new FormControl('Alterar@123', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)]),
-    confirmPassword: new FormControl('Alterar@123', [Validators.required, Validate.match('password')]),
-    optin: new FormControl(false, [Validate.isTrue]),
+    firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(2),  Validators.maxLength(30), Validate.onlyLetters]),
+    nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
+    email: new FormControl('', [Validators.required, Validators.email, Validate.hasDomain]),
+    document: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(19), Validate.onlyNumber]),
+    password: new FormControl(''),
+    confirmPassword: new FormControl(''),
+    optin: new FormControl(false),
   });
 
   constructor(
@@ -77,6 +100,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.notifyForm();
+    this.form.patchValue(this.user);
+    if(this.hasUser) {
+      this.defineValidators();
+    }
   }
 
   ngOnDestroy() {
@@ -136,6 +163,28 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public reset() {
     this.form.reset();
   }
+
+  private addValidators() {
+    this.form.get('password')?.addValidators(this.validatorsPassword);
+    this.form.get('confirmPassword')?.addValidators(this.validatorsConfirmPassword);
+    this.form.get('optin')?.addValidators(this.validatorsOptin);
+  }
+
+  private removeValidators() {
+    this.form.get('password')?.clearValidators();
+    this.form.get('confirmPassword')?.clearValidators();
+    this.form.get('optin')?.clearValidators();
+  }
+
+  private defineValidators() {
+    if(this.isModeCreate) {
+      this.addValidators()
+    } else {
+      this.removeValidators()
+    }
+  }
+
+
 
 }
 
