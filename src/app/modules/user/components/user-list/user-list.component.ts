@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, filter, of, Subscription, tap } from 'rxjs';
@@ -13,12 +13,14 @@ import { TypeForm, UserFormComponent } from '../user-form/user-form.component';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
 
   private readonly unsubscriptions$: Subscription[] = <Subscription[]>[];
   public loadingSave$ = of(false);
   public usersFiltred: User[] = [];
   public users: User[] = [];
+  public showUuid: { [uuid: string]: boolean } = {}; // Propriedade para controlar a visibilidade do UUID
+  public verificationCodes: { [uuid: string]: number } = {}; // Códigos de verificação para cada usuário
 
   public form = new FormGroup({
     search: new FormControl(null, [])
@@ -37,8 +39,11 @@ export class UserListComponent implements OnInit {
     this.userService.list().subscribe({
       next: (response: any) => {
         this.users = response.data || [];
-        console.log('Usuários recebidos: ', this.users);
         this.usersFiltred = this.users;
+        this.users.forEach(user => {
+          this.showUuid[user.uuid] = false; // Inicializa todos os UUIDs como ocultos
+          this.verificationCodes[user.uuid] = this.generateVerificationCode(); // Gera um código de verificação para cada usuário
+        });
         this.changeSearch();
       },
       error: (err: any) => {
@@ -46,6 +51,25 @@ export class UserListComponent implements OnInit {
         console.error('Erro ao listar usuários: ', err);
       }
     });
+  }
+
+  // Gera um código de verificação aleatório entre 1000 e 9999
+  private generateVerificationCode(): number {
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+
+  // Função para alternar a visibilidade do UUID com verificação
+  public toggleUuidVisibility(uuid: string): void {
+    const code = this.verificationCodes[uuid];
+    const userInput = prompt(`Para visualizar o UUID, digite o número: ${code}`);
+
+    if (userInput === String(code)) {
+      this.showUuid[uuid] = !this.showUuid[uuid];
+      // Gera um novo código de verificação após exibir o UUID
+      this.verificationCodes[uuid] = this.generateVerificationCode();
+    } else {
+      this.toastService.error('Código incorreto. Não foi possível exibir o UUID.');
+    }
   }
 
   private changeSearch() {
