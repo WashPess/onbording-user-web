@@ -22,7 +22,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   @Input() set mode(mode: TypeForm) {
     this.modeLocal = mode;
-    // this.defineValidators();
+    this.defineValidators();
   }
 
   @Output() changeForm = new EventEmitter<FormGroup>();
@@ -81,6 +81,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   private readonly validatorsOptin = [Validate.isTrue];
 
   public form = new FormGroup({
+    uuid: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
     lastName: new FormControl('', [Validators.required, Validators.minLength(2),  Validators.maxLength(30), Validate.onlyLetters]),
     nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
@@ -116,32 +117,54 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   public hasError(item: any): boolean {
-    if(!item) {
+    if (!item?.touched && !item?.dirty) {
       return false;
     }
 
-    const keys = Object.keys(item);
+    const errors = item?.errors || {};
+    const keys = Object.keys(errors);
     return keys.length > 0;
   }
 
   public save() {
 
-    this.form.get('optin')?.updateValueAndValidity();
-    const control = this.form.get('optin')?.invalid;
+    if(this.isModeCreate) {
+      this.form.get('optin')?.updateValueAndValidity();
+      // const control = this.form.get('optin')?.invalid;
+    }
 
-    // if(this.userForm.invalid) {
-    //   this.notify('danger', 'Formulário inválido');
-    //   return;
-    // }
+    if(this.form.invalid) {
+      this.toastService.warning("O Formulário precisa ser preenchido corretamente.")
+      return;
+    }
 
-    // console.log("SEND: ", this.userForm.invalid, control);
-
-    // return
-
-    const user = this.form.value;
+    const user: User = this.form.value as User;
     console.log("SAVE", user, this.form.valid);
 
     this.form.disable();
+
+    if(this.isModeEdit) {
+      const { uuid }: any = user;
+      const subscription = this.userService.update(uuid, user)
+      .pipe(
+        finalize(()=> this.form.enable()),
+      ).subscribe({
+        next: (a: any)=> {
+          console.log("SAVED: ", a);
+          this.toastService.success("Usuário atualizado com sucesso");
+        },
+        error: (err: HttpErrorResponse)=> {
+          const { error : { message } } = err;
+          this.toastService.error("Erro ao tentar atualizar o usuário");
+          console.log("ERROR: ", err);
+        },
+      });
+
+    this.unsubscriptions$.push(subscription);
+
+      return;
+    }
+
     const subscription = this.userService.save(user)
     .pipe(
       finalize(()=> this.form.enable()),

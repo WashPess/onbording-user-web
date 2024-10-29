@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { PositionDialog, TypeDialog } from "../alert-dialog/alert-dialog.component";
+import { AlertDialogService } from "../alert-dialog/alert-dialog.service";
 
 export type TypeNotify = 'success' | 'danger' | 'info' | 'warning' | 'primary' | 'secondary' | 'default';
 
@@ -21,6 +23,9 @@ export interface TimeControl {
 })
 export class ToastService {
 
+  public loading$ = of(true);
+
+
   public delay: number = 6000;
   public observers: ToastNotify[] = <ToastNotify[]>[];
 
@@ -34,7 +39,9 @@ export class ToastService {
     return this.hide.asObservable();
   }
 
-  constructor() {
+  constructor(
+    private readonly alertDialogService: AlertDialogService,
+  ) {
     this.changeHided();
   }
 
@@ -71,6 +78,29 @@ export class ToastService {
   public default(msg: string, delay: number = 0) {
     delay = delay || this.delay;
     this.notify('default', 'Default', msg, delay);
+  }
+
+  public dialog(
+    type: TypeDialog,
+    title: string,
+    message: string,
+    confirmLabel: string,
+    cancelLabel: string,
+    position: PositionDialog ,
+    hideIcon: boolean,
+    loading$: Observable<boolean>
+  ): Observable<boolean> {
+    this.loading$ = loading$;
+    return this.alertDialogService.openAlertDialog(
+      type,
+      title,
+      message,
+      confirmLabel,
+      cancelLabel,
+      position,
+      hideIcon,
+      this.loading$,
+    )
   }
 
   private notify(type: TypeNotify, title: string, message: string, delay: number = 6000, active: boolean = true) {

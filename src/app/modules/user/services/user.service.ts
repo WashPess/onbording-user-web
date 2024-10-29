@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, finalize, Observable } from 'rxjs';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +15,29 @@ export class UserService {
     return this._loadingSave.asObservable();
   }
 
+  private readonly _loadingDelete = new BehaviorSubject<boolean>(false);
+  public get loadingDelete$(): Observable<boolean> {
+    return this._loadingDelete.asObservable();
+  }
+
   constructor(private readonly http: HttpClient) { }
 
-  public save(user: any): Observable<any> {
+  public save(user: User): Observable<any> {
 
     const url = `${this.endpointV1}/user`;
     this._loadingSave.next(true);
-    // return of({}).pipe(delay(5000))
     return this.http.post(url, user)
     .pipe(
-      // catchError((err)=> of(err)),
+      finalize(()=> this._loadingSave.next(false)),
+    );
+  }
+
+  public update(uuid: string, user: User): Observable<any> {
+
+    const url = `${this.endpointV1}/user/${uuid}`;
+    this._loadingSave.next(true);
+    return this.http.put(url, user)
+    .pipe(
       finalize(()=> this._loadingSave.next(false)),
     );
   }
@@ -34,6 +48,16 @@ export class UserService {
     return this.http.get(url)
     .pipe(
       finalize(() => this._loadingSave.next(false)),
+    );
+  }
+
+  public delete(uuid: string): Observable<any> {
+
+    const url = `${this.endpointV1}/user/${uuid}`;
+    this._loadingDelete.next(true);
+    return this.http.delete(url)
+    .pipe(
+      finalize(()=> this._loadingDelete.next(false)),
     );
   }
 

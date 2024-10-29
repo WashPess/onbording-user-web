@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime, distinctUntilChanged, filter, of, Subscription, tap } from 'rxjs';
-import { AlertDialogService } from '../../../shared/components/alert-dialog/alert-dialog.service';
+import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscription, take, tap } from 'rxjs';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -17,6 +16,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private readonly unsubscriptions$: Subscription[] = <Subscription[]>[];
   public loadingSave$ = of(false);
+  public loadingDelete$ = of(true);
   public usersFiltred: User[] = [];
   public users: User[] = [];
   public showUuid: { [uuid: string]: boolean } = {}; // Propriedade para controlar a visibilidade do UUID
@@ -27,12 +27,13 @@ export class UserListComponent implements OnInit, OnDestroy {
   });
 
   constructor(
+    private readonly modal: NgbModal,
     private readonly userService: UserService,
     private readonly toastService: ToastService,
-    private readonly modal: NgbModal,
-    private readonly alertDialogService: AlertDialogService,
   ) {
     this.loadingSave$ = this.userService.loadingSave$;
+    this.loadingDelete$ = this.userService.loadingDelete$;
+
   }
 
   ngOnInit(): void {
@@ -41,8 +42,8 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.users = response.data || [];
         this.usersFiltred = this.users;
         this.users.forEach(user => {
-          this.showUuid[user.uuid] = false; // Inicializa todos os UUIDs como ocultos
-          this.verificationCodes[user.uuid] = this.generateVerificationCode(); // Gera um código de verificação para cada usuário
+        this.showUuid[user.uuid] = false; // Inicializa todos os UUIDs como ocultos
+        this.verificationCodes[user.uuid] = this.generateVerificationCode(); // Gera um código de verificação para cada usuário
         });
         this.changeSearch();
       },
@@ -51,6 +52,10 @@ export class UserListComponent implements OnInit, OnDestroy {
         console.error('Erro ao listar usuários: ', err);
       }
     });
+  }
+
+  private deleteUserById$(uuid: string): Observable<any> {
+    return this.userService.delete(uuid);
   }
 
   // Gera um código de verificação aleatório entre 1000 e 9999
@@ -120,16 +125,20 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   public deleteUser() {
-    this.alertDialogService.openAlertDialog(
+    this.toastService.dialog(
       'danger',
       'Deletar Usuário',
       'Tem certeza que deseja deletar o Usuário?',
       'Deletar',
       'Cancelar',
       'center',
-      false
-    ).subscribe((state: boolean) => {
-    });
+      false,
+      this.loadingDelete$
+    ).pipe(
+      take(1),
+      filter((state: any)=> state),
+      tap((state: any)=> console.log("STATE: ", state)),
+    ).subscribe();
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
 
-<div class="card shadow rounded-4 mx-4">
+<div class="card shadow m-0">
 
   <div class="card-header p-4">
     <h4 class="p-0 m-0 px-2">Cadastro de Usuário</h4>
@@ -10,7 +10,7 @@
     <form [formGroup]="form" class="form row p-0 m-0">
 
       <div class="col-4 mb-3">
-        <label class="form-label">Name <span class="text-danger">*</span></label>
+        <label class="form-label">Nome <span class="text-danger">*</span></label>
       </div>
 
       <div class="col-8 mb-3 d-flex justify-content-between gap-2">
@@ -21,7 +21,7 @@
             placeholder="Max"
             class="form-control w-100"
             formControlName="firstName"
-            [ngClass]="{ 'is-invalid': hasError(firstName?.errors) }"
+            [ngClass]="{ 'is-invalid': hasError(firstName) }"
           >
 
           <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)" class="form-text text-danger">
@@ -29,6 +29,7 @@
             <div *ngIf="firstName?.errors?.['minlength']"> Primeiro nome deve conter no minimo 2 caracteres. </div>
             <div *ngIf="firstName?.errors?.['maxlength']"> O nome deve conter no máximo 30 caracteres.</div>
             <div *ngIf="firstName?.errors?.['onlyletters']"> O nome deve conter somente letras.</div>
+
           </div>
 
         </div>
