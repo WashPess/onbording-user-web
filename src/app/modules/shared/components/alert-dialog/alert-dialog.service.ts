@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { BehaviorSubject, of, skip } from "rxjs";
+import { BehaviorSubject, skip } from "rxjs";
 
 import { AlertDialogComponent, PositionDialog, TypeDialog } from "./alert-dialog.component";
 
@@ -32,7 +32,6 @@ export class AlertDialogService {
     cancelLabel = "Cancelar",
     position: PositionDialog = "start",
     hideIcon = false,
-    loading$ = of(false),
   ) {
 
     const modal = this.modal.open(AlertDialogComponent, { size: 'md', backdrop: false, });

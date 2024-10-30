@@ -1,5 +1,6 @@
-import { Component, Input, Optional } from "@angular/core";
+import { Component, EventEmitter, Input, Optional, Output } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, of } from "rxjs";
 
 export type TypeDialog = 'message' | 'success' | 'danger' | 'info' | 'warning' | 'primary' | 'second';
 export type PositionDialog = 'start' | 'center' | 'end';
@@ -20,17 +21,30 @@ export const IconDialog = new Map<TypeDialog, string>([
   styleUrls: ['alert-dialog.component.scss']
 })
 export class AlertDialogComponent {
+
   @Input() title = ``;
   @Input() message = ``;
   @Input() cancelLabel = "Cancelar";
   @Input() hideIcon: boolean = false;
   @Input() confirmLabel = "Confirmar";
   @Input() type: TypeDialog = "message";
+  @Input() waintingLabel: string = "Por favor aguarde...";
   @Input() position: PositionDialog = "start";
-  @Input() selectedUserName: string = ''; // Nome do usuário para o modal
 
-  public isLoading = false; // Estado de carregamento
-  public state: boolean | undefined = undefined;
+  @Input() set loading(loading: Observable<boolean> | boolean) {
+
+    if(loading instanceof Observable) {
+      this.isLoading$ = loading;
+      return;
+    }
+
+    this.isLoading$ = of(Boolean(loading) || false);
+  }
+
+  @Output() confirmEvent = new EventEmitter<void>();
+
+  public isLoading$ = of(false);
+  private state = false;
 
   constructor(@Optional() private readonly activeModal: NgbActiveModal) {}
 
@@ -67,12 +81,9 @@ export class AlertDialogComponent {
   }
 
   public confirm() {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-      this.state = true;
-      this.close();
-    }, 2000); // Delay de 2 segundos antes de confirmar a exclusão
+    this.state = true;
+    this.confirmEvent.emit();
+    this.close();
   }
 
   public cancel() {

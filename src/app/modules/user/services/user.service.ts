@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, finalize, Observable } from 'rxjs';
+import { BehaviorSubject, finalize, map, Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -42,11 +42,12 @@ export class UserService {
     );
   }
 
-  public list(): Observable<any> {
+  public list(): Observable<any[]> {
     const url = `${this.endpointV1}/users`;
     this._loadingSave.next(true);
     return this.http.get(url)
     .pipe(
+      map((response: any)=>response.data || []),
       finalize(() => this._loadingSave.next(false)),
     );
   }

@@ -86,11 +86,9 @@ export class ToastService {
     message: string,
     confirmLabel: string,
     cancelLabel: string,
-    position: PositionDialog ,
-    hideIcon: boolean,
-    loading$: Observable<boolean>
+    position: PositionDialog = 'start',
+    hideIcon: boolean = false,
   ): Observable<boolean> {
-    this.loading$ = loading$;
     return this.alertDialogService.openAlertDialog(
       type,
       title,
@@ -99,7 +97,6 @@ export class ToastService {
       cancelLabel,
       position,
       hideIcon,
-      this.loading$,
     )
   }
 

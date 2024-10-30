@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscription, take, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscription, switchMap, tap } from 'rxjs';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
-// import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component'; // Importe o AlertDialogComponent
-import { AlertDialogComponent } from '../../../shared/components/alert-dialog/alert-dialog.component';
+// import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { TypeForm, UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
@@ -38,22 +37,29 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userService.list().subscribe({
-      next: (response: any) => {
-        this.users = response.data || [];
-        this.usersFiltred = this.users;
-        this.users.forEach(user => {
-          this.showUuid[user.uuid] = false;
-          this.verificationCodes[user.uuid] = this.generateVerificationCode();
-        });
-        this.changeSearch();
-      },
-      error: (err: any) => {
-        this.toastService.error('Erro ao carregar a lista de usuários');
-        console.error('Erro ao listar usuários: ', err);
-      }
-    });
+    this.loadUsers();
+    this.changeSearch();
   }
+
+  ngOnDestroy() {
+    this.unsubscriptions$.forEach((sub: Subscription) => sub.unsubscribe());
+  }
+
+  private loadUsers() {
+     const subscription = this.loadUsers$().subscribe({
+      error: (err: Error) => this.toastService.error(`Erro ao carregar a lista de usuários. ${err.message}`),
+    });
+    this.unsubscriptions$.push(subscription);
+  }
+
+  private loadUsers$(): Observable<any> {
+    return this.userService.list()
+    .pipe(
+      tap((users: any[])=> this.users = users),
+      tap((users: any[])=> this.usersFiltred = users),
+      tap(()=> this.digest()),
+    );
+ }
 
   private deleteUserById$(uuid: string): Observable<any> {
     return this.userService.delete(uuid);
@@ -123,31 +129,27 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   public deleteUser(user: User) {
-    const modalRef = this.modal.open(AlertDialogComponent); // Abre o AlertDialogComponent como modal
-    modalRef.componentInstance.title = 'Deletar Usuário';
-    modalRef.componentInstance.message = `Tem certeza que deseja deletar o usuário ${user.firstName}?`;
-    modalRef.componentInstance.cancelLabel = 'Cancelar';
-    modalRef.componentInstance.confirmLabel = 'Deletar';
-    modalRef.componentInstance.selectedUserName = user.firstName; // Passa o nome do usuário
-
-    modalRef.closed
-      .pipe(
-        take(1),
-        filter((state: any) => state),
-        tap(() => this.deleteUserById$(user.uuid).subscribe({
-          next: () => {
-            this.toastService.success(`Usuário ${user.firstName} deletado com sucesso!`);
-            this.users = this.users.filter(u => u.uuid !== user.uuid);
-            this.usersFiltred = this.users;
-          },
-          error: () => {
-            this.toastService.error(`Erro ao deletar o usuário ${user.firstName}.`);
-          }
-        }))
-      ).subscribe();
+    this.toastService.dialog(
+      "danger",
+      "Deletar Usuário",
+      `Tem certeza que deseja deletar o usuário <b>${user.fullName}</b>?`,
+      "Sim",
+      "Cancelar",
+    ).pipe(
+      filter((state: any)=> state),
+      switchMap(()=> this.deleteUserById$(user.uuid)),
+      switchMap(()=> this.loadUsers$()),
+    ).subscribe({
+      next: ()=> this.toastService.success(`Usuário ${user.fullName} deletado com sucesso.`),
+      error: (err: Error)=> this.toastService.error(`Erro ao deletar o usuário. ${err.message}`),
+    })
   }
 
-  ngOnDestroy() {
-    this.unsubscriptions$.forEach((sub: Subscription) => sub.unsubscribe());
+  private digest() {
+    this.users.forEach(user => {
+      this.showUuid[user.uuid] = false;
+      this.verificationCodes[user.uuid] = this.generateVerificationCode();
+    });
   }
+
 }
