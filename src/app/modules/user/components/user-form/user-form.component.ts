@@ -8,7 +8,6 @@ import { Validate } from '../../../shared/utils/validate.form';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
-
 export type TypeForm = 'create' | 'edit'
 
 @Component({
@@ -44,6 +43,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return Object.keys(this.user).length > 0;
   }
 
+  // Métodos para acessar campos individuais do formulário
   public get firstName() {
     return this.form.get('firstName');
   }
@@ -76,6 +76,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return this.form.get('optin');
   }
 
+  // Função para obter o nome completo do usuário
+  public getFullName(): string {
+    return `${this.firstName?.value ?? ''} ${this.lastName?.value ?? ''}`.trim();
+  }
+
   private readonly validatorsPassword = [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)];
   private readonly validatorsConfirmPassword = [Validators.required, Validate.match('password')];
   private readonly validatorsOptin = [Validate.isTrue];
@@ -83,7 +88,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
   public form = new FormGroup({
     uuid: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
-    lastName: new FormControl('', [Validators.required, Validators.minLength(2),  Validators.maxLength(30), Validate.onlyLetters]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
     nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     email: new FormControl('', [Validators.required, Validators.email, Validate.hasDomain]),
     document: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(19), Validate.onlyNumber]),
@@ -102,18 +107,18 @@ export class UserFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.notifyForm();
     this.form.patchValue(this.user);
-    if(this.hasUser) {
+    if (this.hasUser) {
       this.defineValidators();
     }
   }
 
   ngOnDestroy() {
-    this.unsubscriptions$.forEach((sb: Subscription)=> sb.unsubscribe());
+    this.unsubscriptions$.forEach((sb: Subscription) => sb.unsubscribe());
   }
 
   private notifyForm() {
     this.changeForm.emit(this.form);
-    this.form.valueChanges.subscribe(()=> this.changeForm.emit(this.form));
+    this.form.valueChanges.subscribe(() => this.changeForm.emit(this.form));
   }
 
   public hasError(item: any): boolean {
@@ -128,12 +133,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   public save() {
 
-    if(this.isModeCreate) {
+    if (this.isModeCreate) {
       this.form.get('optin')?.updateValueAndValidity();
-      // const control = this.form.get('optin')?.invalid;
     }
 
-    if(this.form.invalid) {
+    if (this.form.invalid) {
       this.toastService.warning("O Formulário precisa ser preenchido corretamente.")
       return;
     }
@@ -143,42 +147,42 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
     this.form.disable();
 
-    if(this.isModeEdit) {
+    if (this.isModeEdit) {
       const { uuid }: any = user;
       const subscription = this.userService.update(uuid, user)
-      .pipe(
-        finalize(()=> this.form.enable()),
-      ).subscribe({
-        next: (a: any)=> {
-          console.log("SAVED: ", a);
-          this.toastService.success("Usuário atualizado com sucesso");
-        },
-        error: (err: HttpErrorResponse)=> {
-          const { error : { message } } = err;
-          this.toastService.error("Erro ao tentar atualizar o usuário");
-          console.log("ERROR: ", err);
-        },
-      });
+        .pipe(
+          finalize(() => this.form.enable()),
+        ).subscribe({
+          next: (a: any) => {
+            console.log("SAVED: ", a);
+            this.toastService.success("Usuário atualizado com sucesso");
+          },
+          error: (err: HttpErrorResponse) => {
+            const { error: { message } } = err;
+            this.toastService.error("Erro ao tentar atualizar o usuário");
+            console.log("ERROR: ", err);
+          },
+        });
 
-    this.unsubscriptions$.push(subscription);
+      this.unsubscriptions$.push(subscription);
 
       return;
     }
 
     const subscription = this.userService.save(user)
-    .pipe(
-      finalize(()=> this.form.enable()),
-    ).subscribe({
-      next: (a: any)=> {
-        console.log("SAVED: ", a);
-        this.toastService.success("Usuário salvo com sucesso");
-      },
-      error: (err: HttpErrorResponse)=> {
-        const { error : { message } } = err;
-        this.toastService.error("Erro ao tentar salvar usuário");
-        console.log("ERROR: ", err);
-      },
-    });
+      .pipe(
+        finalize(() => this.form.enable()),
+      ).subscribe({
+        next: (a: any) => {
+          console.log("SAVED: ", a);
+          this.toastService.success("Usuário salvo com sucesso");
+        },
+        error: (err: HttpErrorResponse) => {
+          const { error: { message } } = err;
+          this.toastService.error("Erro ao tentar salvar usuário");
+          console.log("ERROR: ", err);
+        },
+      });
 
     this.unsubscriptions$.push(subscription);
   }
@@ -200,14 +204,10 @@ export class UserFormComponent implements OnInit, OnDestroy {
   }
 
   private defineValidators() {
-    if(this.isModeCreate) {
+    if (this.isModeCreate) {
       this.addValidators()
     } else {
       this.removeValidators()
     }
   }
-
-
-
 }
-

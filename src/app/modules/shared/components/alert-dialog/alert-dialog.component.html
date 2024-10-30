@@ -3,8 +3,7 @@
     <div class="modal-content">
 
       <div class="modal-header d-flex justify-content-between">
-
-        <ng-container *ngIf="isFillTitle" >
+        <ng-container *ngIf="isFillTitle">
           <h5 class="modal-title d-flex flex-fill justify-content-{{positionDialog}}">
 
             <ng-container *ngIf="hasIcon">
@@ -13,33 +12,37 @@
               </span>
             </ng-container>
 
-            <span [innerHTML]="title" class="" >...</span>
-
+            <span [innerHTML]="title" class="">...</span>
           </h5>
         </ng-container>
 
         <button type="button" class="btn-close ms-auto" (click)="dismiss()"></button>
-
       </div>
 
       <div class="modal-body">
         <ng-container *ngIf="isFillMessage">
-          <p [innerHTML]="message">...</p>
+          <p>Tem certeza que deseja excluir o usuário <strong>{{ selectedUserName }}</strong>?</p>
         </ng-container>
       </div>
 
       <div class="modal-footer gap-2">
-
         <ng-container *ngIf="isFillCancelLabel">
           <button type="button" class="btn btn-secondary" (click)="cancel()">{{ cancelLabel }}</button>
         </ng-container>
 
         <ng-container *ngIf="isFillConfirmLabel">
-          <button type="button" class="btn btn-primary" (click)="confirm()">{{ confirmLabel }}</button>
+          <button type="button" class="btn btn-primary" (click)="confirm()" [disabled]="isLoading">
+            <ng-container *ngIf="!isLoading; else loadingIcon">
+              {{ confirmLabel }}
+            </ng-container>
+            <ng-template #loadingIcon>
+              <div class="spinner-border m-0" role="status">
+                <span class="sr-only"></span>
+              </div>
+            </ng-template>
+          </button>
         </ng-container>
-
       </div>
     </div>
   </div>
 </div>
-

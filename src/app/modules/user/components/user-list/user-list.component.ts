@@ -5,6 +5,8 @@ import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscriptio
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+// import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component'; // Importe o AlertDialogComponent
+import { AlertDialogComponent } from '../../../shared/components/alert-dialog/alert-dialog.component';
 import { TypeForm, UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
@@ -19,8 +21,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   public loadingDelete$ = of(true);
   public usersFiltred: User[] = [];
   public users: User[] = [];
-  public showUuid: { [uuid: string]: boolean } = {}; // Propriedade para controlar a visibilidade do UUID
-  public verificationCodes: { [uuid: string]: number } = {}; // Códigos de verificação para cada usuário
+  public showUuid: { [uuid: string]: boolean } = {};
+  public verificationCodes: { [uuid: string]: number } = {};
 
   public form = new FormGroup({
     search: new FormControl(null, [])
@@ -33,7 +35,6 @@ export class UserListComponent implements OnInit, OnDestroy {
   ) {
     this.loadingSave$ = this.userService.loadingSave$;
     this.loadingDelete$ = this.userService.loadingDelete$;
-
   }
 
   ngOnInit(): void {
@@ -42,8 +43,8 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.users = response.data || [];
         this.usersFiltred = this.users;
         this.users.forEach(user => {
-        this.showUuid[user.uuid] = false; // Inicializa todos os UUIDs como ocultos
-        this.verificationCodes[user.uuid] = this.generateVerificationCode(); // Gera um código de verificação para cada usuário
+          this.showUuid[user.uuid] = false;
+          this.verificationCodes[user.uuid] = this.generateVerificationCode();
         });
         this.changeSearch();
       },
@@ -58,19 +59,16 @@ export class UserListComponent implements OnInit, OnDestroy {
     return this.userService.delete(uuid);
   }
 
-  // Gera um código de verificação aleatório entre 1000 e 9999
   private generateVerificationCode(): number {
     return Math.floor(1000 + Math.random() * 9000);
   }
 
-  // Função para alternar a visibilidade do UUID com verificação
   public toggleUuidVisibility(uuid: string): void {
     const code = this.verificationCodes[uuid];
     const userInput = prompt(`Para visualizar o UUID, digite o número: ${code}`);
 
     if (userInput === String(code)) {
       this.showUuid[uuid] = !this.showUuid[uuid];
-      // Gera um novo código de verificação após exibir o UUID
       this.verificationCodes[uuid] = this.generateVerificationCode();
     } else {
       this.toastService.error('Código incorreto. Não foi possível exibir o UUID.');
@@ -124,21 +122,29 @@ export class UserListComponent implements OnInit, OnDestroy {
     console.log("Formulário de usuário aberto");
   }
 
-  public deleteUser() {
-    this.toastService.dialog(
-      'danger',
-      'Deletar Usuário',
-      'Tem certeza que deseja deletar o Usuário?',
-      'Deletar',
-      'Cancelar',
-      'center',
-      false,
-      this.loadingDelete$
-    ).pipe(
-      take(1),
-      filter((state: any)=> state),
-      tap((state: any)=> console.log("STATE: ", state)),
-    ).subscribe();
+  public deleteUser(user: User) {
+    const modalRef = this.modal.open(AlertDialogComponent); // Abre o AlertDialogComponent como modal
+    modalRef.componentInstance.title = 'Deletar Usuário';
+    modalRef.componentInstance.message = `Tem certeza que deseja deletar o usuário ${user.firstName}?`;
+    modalRef.componentInstance.cancelLabel = 'Cancelar';
+    modalRef.componentInstance.confirmLabel = 'Deletar';
+    modalRef.componentInstance.selectedUserName = user.firstName; // Passa o nome do usuário
+
+    modalRef.closed
+      .pipe(
+        take(1),
+        filter((state: any) => state),
+        tap(() => this.deleteUserById$(user.uuid).subscribe({
+          next: () => {
+            this.toastService.success(`Usuário ${user.firstName} deletado com sucesso!`);
+            this.users = this.users.filter(u => u.uuid !== user.uuid);
+            this.usersFiltred = this.users;
+          },
+          error: () => {
+            this.toastService.error(`Erro ao deletar o usuário ${user.firstName}.`);
+          }
+        }))
+      ).subscribe();
   }
 
   ngOnDestroy() {

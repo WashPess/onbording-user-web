@@ -22,7 +22,6 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col" class="text-center">Uuid</th>
         <th scope="col">Nome</th>
         <th scope="col">Sobrenome</th>
@@ -34,12 +33,11 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let user of usersFiltred">
+      <ng-container *ngFor="let user of usersFiltred; let i = index">
         <tr>
-          <th scope="row"></th>
           <td class="text-center">
             <span *ngIf="showUuid[user.uuid]; else hiddenUuid">{{ user.uuid }}</span>
-            <ng-template #hiddenUuid></ng-template>
+            <ng-template #hiddenUuid>****</ng-template>
             <button class="btn btn-link p-0" (click)="toggleUuidVisibility(user.uuid)">
               <i [class.bi-eye]="!showUuid[user.uuid]" [class.bi-eye-slash]="showUuid[user.uuid]"></i>
             </button>
@@ -55,7 +53,7 @@
               <button class="btn btn-primary rounded-circle" (click)="openUserForm(user, 'edit')">
                 <i class="bi bi-pencil-square"></i>
               </button>
-              <button class="btn btn-danger rounded-circle" (click)="deleteUser()">
+              <button class="btn btn-danger rounded-circle" (click)="deleteUser(user)">
                 <i class="bi bi-trash3"></i>
               </button>
             </div>

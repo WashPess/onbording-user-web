@@ -5,14 +5,14 @@ export type TypeDialog = 'message' | 'success' | 'danger' | 'info' | 'warning' |
 export type PositionDialog = 'start' | 'center' | 'end';
 
 export const IconDialog = new Map<TypeDialog, string>([
-  [ "message", "bi-chat-right-dots" ],
-  [ "success", "bi-check2-circle" ],
-  [ "danger", "bi-slash-circle" ],
-  [ "info", "bi-exclamation-circle" ],
-  [ "warning", "bi-exclamation-circle" ],
-  [ "primary", "bi-chat-right" ],
-  [ "second", "" ],
-])
+  ["message", "bi-chat-right-dots"],
+  ["success", "bi-check2-circle"],
+  ["danger", "bi-slash-circle"],
+  ["info", "bi-exclamation-circle"],
+  ["warning", "bi-exclamation-circle"],
+  ["primary", "bi-chat-right"],
+  ["second", ""],
+]);
 
 @Component({
   selector: 'app-alert-dialog',
@@ -20,7 +20,6 @@ export const IconDialog = new Map<TypeDialog, string>([
   styleUrls: ['alert-dialog.component.scss']
 })
 export class AlertDialogComponent {
-
   @Input() title = ``;
   @Input() message = ``;
   @Input() cancelLabel = "Cancelar";
@@ -28,13 +27,15 @@ export class AlertDialogComponent {
   @Input() confirmLabel = "Confirmar";
   @Input() type: TypeDialog = "message";
   @Input() position: PositionDialog = "start";
+  @Input() selectedUserName: string = ''; // Nome do usuário para o modal
 
+  public isLoading = false; // Estado de carregamento
   public state: boolean | undefined = undefined;
 
-  constructor(@Optional() private readonly activeModal: NgbActiveModal ) {}
+  constructor(@Optional() private readonly activeModal: NgbActiveModal) {}
 
   public get isFillTitle(): boolean {
-    return  String(this.title ?? '').length > 0;
+    return String(this.title ?? '').length > 0;
   }
 
   public get isFillMessage(): boolean {
@@ -66,8 +67,12 @@ export class AlertDialogComponent {
   }
 
   public confirm() {
-    this.state = true;
-    this.close();
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.state = true;
+      this.close();
+    }, 2000); // Delay de 2 segundos antes de confirmar a exclusão
   }
 
   public cancel() {
@@ -82,5 +87,4 @@ export class AlertDialogComponent {
   private close() {
     this.activeModal.close(this.state);
   }
-
 }
