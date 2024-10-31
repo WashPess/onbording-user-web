@@ -114,3 +114,10 @@ a[href] {
 .bg-none {
   background-color: transparent !important;
 }
+
+.disabled {
+  cursor: not-allowed !important;
+  * {
+    cursor: not-allowed !important;
+  }
+}

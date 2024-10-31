@@ -85,7 +85,11 @@
           class="form-control"
           placeholder="CPF / CNPJ"
           formControlName="document"
-          [ngClass]="{ 'is-invalid': hasError(document?.errors) }"
+          [ngClass]="{
+            'is-invalid': hasError(document?.errors),
+            'text-muted opacity-75 disabled opacity-50-hover': document?.disabled
+
+          }"
           documentmask
         >
 
@@ -95,6 +99,7 @@
           <div *ngIf="document?.errors?.['maxlength']"> O documento deve conter no máximo 14 caracteres.</div>
           <div *ngIf="document?.errors?.['onlynumber']"> O documento deve conter somente numeros.</div>
         </div>
+
       </div>
 
       <div class="col-4 mb-3">
@@ -114,7 +119,7 @@
         <div *ngIf="nickname?.invalid && (nickname?.dirty || nickname?.touched)" class="form-text text-danger">
           <div *ngIf="nickname?.errors?.['required']">É necessario preencher o apelido.</div>
           <div *ngIf="nickname?.errors?.['minlength']"> O apelido deve conter no minimo 2 caracteres. </div>
-          <div *ngIf="nickname?.errors?.['maxlength']"> O apelido deve conter no máximo 30 caracteres.</div>
+          <div *ngIf="nickname?.errors?.['maxlength']"> O apelido deve conter no máximo 10 caracteres.</div>
         </div>
 
       </div>

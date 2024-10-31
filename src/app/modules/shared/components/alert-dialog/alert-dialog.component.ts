@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Optional, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, of } from "rxjs";
 
@@ -46,7 +46,7 @@ export class AlertDialogComponent {
   public isLoading$ = of(false);
   private state = false;
 
-  constructor(@Optional() private readonly activeModal: NgbActiveModal) {}
+  constructor(private readonly activeModal: NgbActiveModal) {}
 
   public get isFillTitle(): boolean {
     return String(this.title ?? '').length > 0;

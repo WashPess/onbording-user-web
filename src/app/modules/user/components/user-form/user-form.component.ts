@@ -1,8 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { finalize, of, Subscription } from 'rxjs';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { finalize, of, Subscription, tap } from 'rxjs';
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { Validate } from '../../../shared/utils/validate.form';
 import { User } from '../../models/user.model';
@@ -26,10 +27,15 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   @Output() changeForm = new EventEmitter<FormGroup>();
 
+
   private readonly unsubscriptions$: Subscription[] = <Subscription[]>[];
   public loadingSave$ = of(false);
 
   public modeLocal: TypeForm = 'create'
+
+  private readonly validatorsPassword = [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)];
+  private readonly validatorsConfirmPassword = [Validators.required, Validate.match('password')];
+  private readonly validatorsOptin = [Validate.isTrue];
 
   public get isModeEdit(): boolean {
     return this.modeLocal == 'edit';
@@ -76,20 +82,11 @@ export class UserFormComponent implements OnInit, OnDestroy {
     return this.form.get('optin');
   }
 
-  // Função para obter o nome completo do usuário
-  public getFullName(): string {
-    return `${this.firstName?.value ?? ''} ${this.lastName?.value ?? ''}`.trim();
-  }
-
-  private readonly validatorsPassword = [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)];
-  private readonly validatorsConfirmPassword = [Validators.required, Validate.match('password')];
-  private readonly validatorsOptin = [Validate.isTrue];
-
   public form = new FormGroup({
     uuid: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
     lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validate.onlyLetters]),
-    nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
+    nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]),
     email: new FormControl('', [Validators.required, Validators.email, Validate.hasDomain]),
     document: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(19), Validate.onlyNumber]),
     password: new FormControl(''),
@@ -100,23 +97,32 @@ export class UserFormComponent implements OnInit, OnDestroy {
   constructor(
     private readonly userService: UserService,
     private readonly toastService: ToastService,
+    private readonly activeModal: NgbActiveModal,
   ) {
     this.loadingSave$ = this.userService.loadingSave$;
   }
 
   ngOnInit() {
-    this.notifyForm();
-    this.form.patchValue(this.user);
-    if (this.hasUser) {
-      this.defineValidators();
-    }
+    this.changesForm();
+    this.setUser();
   }
 
   ngOnDestroy() {
     this.unsubscriptions$.forEach((sb: Subscription) => sb.unsubscribe());
   }
 
-  private notifyForm() {
+  private setUser() {
+    this.form.patchValue(this.user);
+    if (this.isModeEdit) {
+      this.form.get("document")?.disable();
+    }
+
+    if (this.hasUser) {
+      this.defineValidators();
+    }
+  }
+
+  private changesForm() {
     this.changeForm.emit(this.form);
     this.form.valueChanges.subscribe(() => this.changeForm.emit(this.form));
   }
@@ -143,44 +149,35 @@ export class UserFormComponent implements OnInit, OnDestroy {
     }
 
     const user: User = this.form.value as User;
-    console.log("SAVE", user, this.form.valid);
-
     this.form.disable();
 
     if (this.isModeEdit) {
       const { uuid }: any = user;
       const subscription = this.userService.update(uuid, user)
         .pipe(
+          tap(()=> this.close()),
           finalize(() => this.form.enable()),
         ).subscribe({
-          next: (a: any) => {
-            console.log("SAVED: ", a);
-            this.toastService.success("Usuário atualizado com sucesso");
-          },
+          next: () => this.toastService.success("Usuário atualizado com sucesso"),
           error: (err: HttpErrorResponse) => {
             const { error: { message } } = err;
-            this.toastService.error("Erro ao tentar atualizar o usuário");
-            console.log("ERROR: ", err);
+            this.toastService.error(`Erro ao tentar atualizar o usuário. ${message}`);
           },
         });
 
       this.unsubscriptions$.push(subscription);
-
       return;
     }
 
     const subscription = this.userService.save(user)
       .pipe(
+        tap(()=> this.close()),
         finalize(() => this.form.enable()),
       ).subscribe({
-        next: (a: any) => {
-          console.log("SAVED: ", a);
-          this.toastService.success("Usuário salvo com sucesso");
-        },
+        next: () => this.toastService.success("Usuário salvo com sucesso"),
         error: (err: HttpErrorResponse) => {
           const { error: { message } } = err;
-          this.toastService.error("Erro ao tentar salvar usuário");
-          console.log("ERROR: ", err);
+          this.toastService.error(`Erro ao tentar atualizar o usuário. ${message}`);
         },
       });
 
@@ -189,6 +186,7 @@ export class UserFormComponent implements OnInit, OnDestroy {
 
   public reset() {
     this.form.reset();
+    this.activeModal.close();
   }
 
   private addValidators() {
@@ -209,5 +207,9 @@ export class UserFormComponent implements OnInit, OnDestroy {
     } else {
       this.removeValidators()
     }
+  }
+
+  private close() {
+    this.activeModal.close(this.form.value);
   }
 }

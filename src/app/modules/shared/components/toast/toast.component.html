@@ -1,7 +1,7 @@
 
 <div class="">
   <ng-container *ngFor="let notice of observers">
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1000 !important">
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 10000 !important">
       <div
         class="toast bg-{{notice.type}}-subtle border-{{notice.type}}-subtle"
         [ngClass]="{ 'show': notice.active, 'hide': !notice.active }"

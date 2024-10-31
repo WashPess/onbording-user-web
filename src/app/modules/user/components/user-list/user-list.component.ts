@@ -116,16 +116,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     const modal = this.modal.open(UserFormComponent, { size: 'xl' });
     modal.componentInstance.mode = mode;
     modal.componentInstance.user = user || {};
-
-    modal.closed.subscribe(() => {
-      console.log("Modal foi fechado");
-    });
-
-    modal.dismissed.subscribe(() => {
-      console.log("Modal foi abandonado");
-    });
-
-    console.log("Formulário de usuário aberto");
+    modal.closed.pipe(switchMap(()=> this.loadUsers$())).subscribe();
   }
 
   public deleteUser(user: User) {
