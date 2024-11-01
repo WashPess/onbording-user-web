@@ -1,4 +1,23 @@
 
 <div>
-  <app-user-list></app-user-list>
+
+  <ul class="nav nav-tabs" id="record-panel" role="tablist" tabindex={0}>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="user-tab" data-bs-toggle="tab" data-bs-target="#user" type="button" role="tab" aria-controls="user" aria-selected="true">Usuários</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="enterprises-tab" data-bs-toggle="tab" data-bs-target="#enterprises" type="button" role="tab" aria-controls="enterprises" aria-selected="false">Empresas</button>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="record-panel-content">
+    <div class="tab-pane fade show active pt-3" id="user" role="tabpanel" aria-labelledby="user-tab">
+      <app-user-list></app-user-list>
+    </div>
+
+    <div class="tab-pane fade" id="enterprises" role="tabpanel" aria-labelledby="enterprises-tab">
+    </div>
+  </div>
+
 </div>
+

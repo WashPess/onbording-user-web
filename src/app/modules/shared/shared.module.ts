@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModalModule, NgbModule, NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
+
 import { AlertDialogComponent, ToastComponent } from "./components";
 
 import { DocumentMaskDirective } from './directives';
@@ -19,6 +20,7 @@ import { DocumentMaskDirective } from './directives';
     DocumentMaskDirective,
   ],
   imports: [
+    ReactiveFormsModule,
     NgFor,
     JsonPipe,
     NgbModule,
@@ -31,6 +33,7 @@ import { DocumentMaskDirective } from './directives';
     BsDropdownModule.forRoot(),
 	],
   exports: [
+    ReactiveFormsModule,
     NgFor,
     JsonPipe,
     NgbToast,

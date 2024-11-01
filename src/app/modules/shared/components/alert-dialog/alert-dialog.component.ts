@@ -42,6 +42,7 @@ export class AlertDialogComponent {
   }
 
   @Output() confirmEvent = new EventEmitter<void>();
+  @Output() cancelEvent = new EventEmitter<void>();
 
   public isLoading$ = of(false);
   private state = false;
@@ -88,6 +89,7 @@ export class AlertDialogComponent {
 
   public cancel() {
     this.state = false;
+    this.cancelEvent.emit();
     this.close();
   }
 

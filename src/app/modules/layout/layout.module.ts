@@ -6,7 +6,9 @@ import { LayoutRoutingModule } from "./layout-routing.module";
 
 import { LayoutComponent } from './layout.component';
 
-import { ArticleComponent, FooterComponent, AsideComponent, MainComponent, HeaderComponent } from "./components";
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { ArticleComponent, AsideComponent, FooterComponent, HeaderComponent, MainComponent } from "./components";
 import { HomeComponent } from "./pages";
 
 @NgModule({
@@ -15,23 +17,24 @@ import { HomeComponent } from "./pages";
 		HeaderComponent,
 		MainComponent,
 		AsideComponent,
-    	FooterComponent,
+    FooterComponent,
 		ArticleComponent,
 		HomeComponent
 	],
 	imports: [
+    ReactiveFormsModule,
 		LayoutRoutingModule,
-    	SharedModule,
+    SharedModule,
 		UserModule,
 	],
 	exports: [
-		UserModule, 
+    ReactiveFormsModule,
+		UserModule,
 		SharedModule,
-
 		HeaderComponent,
 		MainComponent,
 		AsideComponent,
-    	FooterComponent,
+    FooterComponent,
 		ArticleComponent,
 		HomeComponent
 	],

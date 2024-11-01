@@ -5,7 +5,6 @@ import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscriptio
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
-// import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { TypeForm, UserFormComponent } from '../user-form/user-form.component';
 
 @Component({
