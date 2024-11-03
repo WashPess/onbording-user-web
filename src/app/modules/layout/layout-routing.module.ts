@@ -4,12 +4,12 @@ import { LayoutComponent } from './layout.component';
 import { HomeComponent } from './pages';
 
 const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     component: LayoutComponent,
     children: [
       { path: 'home',  component: HomeComponent },
-      { path: '', loadChildren: ()=> import('../user/user.module').then( m => m.UserModule) },
+      { path: '', loadChildren: ()=> import('../user/user.module').then( m => m.default) },
     ]
   },
   { path: 'home', component: HomeComponent },

@@ -1,0 +1,182 @@
+
+<div class="card shadow m-0">
+
+  <div class="card-header p-4">
+    <h4 class="p-0 m-0 px-2">Cadastro de Empresas</h4>
+  </div>
+
+  <div class="card-body m-0 p-4">
+
+    <form [formGroup]="form" class="form row p-0 m-0">
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Companhia <span class="text-danger">*</span></label>
+      </div>
+
+      <div class="col-8 mb-3 d-flex justify-content-between gap-2">
+        <div class="flex-fill">
+          <input
+            type="text"
+            name="company"
+            placeholder="Max"
+            class="form-control w-100"
+            formControlName="company"
+          >
+
+          <div *ngIf="company?.invalid && (company?.dirty || company?.touched)" class="form-text text-danger">
+            <div *ngIf="company?.errors?.['required']">É necessario preencher o primeiro nome.</div>
+            <div *ngIf="company?.errors?.['minlength']"> Primeiro nome deve conter no minimo 2 caracteres. </div>
+            <div *ngIf="company?.errors?.['maxlength']"> O nome deve conter no máximo 30 caracteres.</div>
+            <div *ngIf="company?.errors?.['onlyletters']"> O nome deve conter somente letras.</div>
+
+          </div>
+
+        </div>
+        <div class="flex-fill">
+          <input
+            type="text"
+            name="timezone"
+            placeholder="Smith"
+            class="form-control"
+            formControlName="timezone"
+          >
+
+          <div *ngIf="timezone?.invalid && (timezone?.dirty || timezone?.touched)" class="form-text text-danger">
+            <div *ngIf="timezone?.errors?.['required']">É necessario preencher o ultimo nome.</div>
+            <div *ngIf="timezone?.errors?.['minlength']"> O ultimo nome deve conter no minimo 2 caracteres. </div>
+            <div *ngIf="timezone?.errors?.['maxlength']"> O ultimo nome deve conter no máximo 30 caracteres.</div>
+            <div *ngIf="timezone?.errors?.['onlyletters']"> O último deve conter somente letras.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Endereço <span class="text-danger">*</span></label>
+      </div>
+
+      <div class="col-8 mb-3">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Endereço"
+          formControlName="address"
+          name="address"
+        >
+
+        <div *ngIf="address?.invalid && (address?.dirty || address?.touched)" class="form-text text-danger">
+          <div *ngIf="address?.errors?.['required']">É necessario preencher o address.</div>
+          <div *ngIf="address?.errors?.['address']"> O address deve ser válido. </div>
+          <div *ngIf="address?.errors?.['hasdomain']"> O email deve ter um domínio válido. </div>
+        </div>
+
+      </div>
+
+      <div class="col-4 mb-3">
+        <label class="form-label">CNPJ<span class="text-danger">*</span></label>
+      </div>
+
+      <div class="col-8 mb-3">
+        <input
+          type="text"
+          name="cnpj"
+          class="form-control"
+          placeholder="CNPJ"
+          formControlName="cnpj"
+          documentmask
+        >
+
+        <div *ngIf="cnpj?.invalid && (cnpj?.dirty || cnpj?.touched)" class="form-text text-danger">
+          <div *ngIf="cnpj?.errors?.['required']">É necessario preencher o documento.</div>
+          <div *ngIf="cnpj?.errors?.['minlength']"> O documento deve conter no minimo 11 caracteres. </div>
+          <div *ngIf="cnpj?.errors?.['maxlength']"> O documento deve conter no máximo 14 caracteres.</div>
+          <div *ngIf="cnpj?.errors?.['onlynumber']"> O documento deve conter somente numeros.</div>
+        </div>
+
+      </div>
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Razão Social <span class="text-danger">*</span></label>
+      </div>
+
+      <div class="col-8 mb-3">
+        <input
+          type="text"
+          name="corporateReason"
+          class="form-control"
+          placeholder="Razão Social"
+          formControlName="corporateReason"
+        >
+
+        <div *ngIf="corporateReason?.invalid && (corporateReason?.dirty || corporateReason?.touched)" class="form-text text-danger">
+          <div *ngIf="corporateReason?.errors?.['required']">É necessario preencher o apelido.</div>
+          <div *ngIf="corporateReason?.errors?.['minlength']"> O apelido deve conter no minimo 2 caracteres. </div>
+          <div *ngIf="corporateReason?.errors?.['maxlength']"> O apelido deve conter no máximo 10 caracteres.</div>
+        </div>
+
+      </div>
+
+      <ng-container *ngIf="!isModeEdit" >
+        <div class="col-4 mb-3">
+        </div>
+      </ng-container>
+
+
+      <ng-container *ngIf="!isModeEdit">
+        <div class="col-4 mb-3">
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isModeEdit">
+        <div class="col-4 mb-3">
+          <label class="form-label">Accept terms<span class="text-danger">*</span></label>
+        </div>
+
+        <div class="col-8 mb-3">
+          <div class="form-check">
+            <input
+              name="optin"
+              type="checkbox"
+              id="optin-terms"
+              formControlName="optin"
+              class="form-check-input"
+            >
+            <label class="form-check-label" for="optin-terms">
+              Accept
+            </label>
+          </div>
+
+          <div *ngIf="true" class="form-text text-danger">
+            <div *ngIf="optin?.errors?.['istrue']">É necessario aceitar os termos.</div>
+          </div>
+
+        </div>
+      </ng-container>
+
+
+    </form>
+
+  </div>
+
+  <div class="card-footer p-4">
+    <div class="d-flex justify-content-end gap-2">
+
+      <button class="btn btn-light border text-muted" (click)="reset()">Discartar</button>
+
+      <button class="btn btn-primary" (click)="save()" [disabled]="(loadingSave$ | async)">
+
+        <ng-container *ngIf="!(loadingSave$ | async)">
+          <span>Salvar alterações</span>
+        </ng-container>
+
+        <ng-container *ngIf="(loadingSave$ | async)">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">Carregando...</span>
+          <span class="ms-2">Esperando...</span>
+        </ng-container>
+
+      </button>
+
+    </div>
+  </div>
+
+</div>

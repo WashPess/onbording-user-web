@@ -8,22 +8,23 @@ import { GenderFormComponent, UserFormComponent, UserListComponent } from "./com
 import { UsersRegistersComponent } from "./pages";
 
 @NgModule({
-	declarations: [
+  declarations: [
     GenderFormComponent,
-		UserComponent,
-		UserFormComponent,
-		UsersRegistersComponent,
+    UserComponent,
+    UserFormComponent,
+    UsersRegistersComponent,
     UserListComponent,
-	],
-	imports: [
-		UserRoutingModule,
-		SharedModule,
-	],
-	exports: [
+  ],
+  imports: [
+    UserRoutingModule,
+    SharedModule,
+    UserModule
+],
+  exports: [
     GenderFormComponent,
-		UserRoutingModule,
-		SharedModule,
-		UsersRegistersComponent,
-	]
+    UserRoutingModule,
+    SharedModule,
+    UsersRegistersComponent,
+  ]
 })
 export class UserModule {}
