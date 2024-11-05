@@ -1,17 +1,11 @@
-import { NgModule } from "@angular/core";
-
 import { CommonModule, JsonPipe, NgFor } from "@angular/common";
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
-import { NgbModalModule, NgbModule, NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-
-
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
+import { NgbModalModule, NgbModule, NgbToast, NgbToastModule } from "@ng-bootstrap/ng-bootstrap";
 import { AlertDialogComponent, ToastComponent } from "./components";
+import { DocumentMaskDirective } from "./directives";
 
-import { DocumentMaskDirective } from './directives';
 
 @NgModule ({
   declarations: [
@@ -29,8 +23,7 @@ import { DocumentMaskDirective } from './directives';
     CommonModule,
     NgbToastModule,
     NgbModalModule,
-    ReactiveFormsModule,
-    BsDropdownModule.forRoot(),
+    // BsDropdownModule.forRoot(),
 	],
   exports: [
     ReactiveFormsModule,
@@ -43,10 +36,9 @@ import { DocumentMaskDirective } from './directives';
     CommonModule,
     NgbModalModule,
     NgbToastModule,
-    BsDropdownModule,
+    // BsDropdownModule,
     ReactiveFormsModule,
     DocumentMaskDirective,
-
     ToastComponent,
     AlertDialogComponent,
   ]

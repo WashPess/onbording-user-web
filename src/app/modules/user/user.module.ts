@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 
-import { SharedModule } from "../shared/shared.module";
-import { UserRoutingModule } from "./user-routing.module";
 import { UserComponent } from './user.component';
 
+import { SharedModule } from "../shared/shared.module";
 import { GenderFormComponent, UserFormComponent, UserListComponent } from "./components";
 import { UsersRegistersComponent } from "./pages";
+import { UserRoutingModule } from "./user-routing.module";
 
 @NgModule({
   declarations: [
@@ -18,11 +18,9 @@ import { UsersRegistersComponent } from "./pages";
   imports: [
     UserRoutingModule,
     SharedModule,
-    UserModule
 ],
   exports: [
     GenderFormComponent,
-    UserRoutingModule,
     SharedModule,
     UsersRegistersComponent,
   ]

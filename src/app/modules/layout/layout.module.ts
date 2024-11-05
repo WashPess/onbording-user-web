@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 
 import { SharedModule } from "../shared/shared.module";
-import UserModule from "../user/user.module";
 import { LayoutRoutingModule } from "./layout-routing.module";
 
 import { LayoutComponent } from './layout.component';
@@ -25,11 +24,9 @@ import { HomeComponent } from "./pages";
     ReactiveFormsModule,
 		LayoutRoutingModule,
     SharedModule,
-		UserModule,
 	],
 	exports: [
     ReactiveFormsModule,
-		UserModule,
 		SharedModule,
 		HeaderComponent,
 		MainComponent,
