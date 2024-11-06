@@ -23,4 +23,4 @@ import { EnterpriseComponent } from "./enterprise.component";
     SharedModule,
   ]
 })
-export class UserModule {}
+export class EnterpriseModule {}
