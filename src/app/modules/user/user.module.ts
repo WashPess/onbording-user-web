@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 
 import { UserComponent } from './user.component';
 
+import { EnterpriseModule } from "../enterprise/enterprise.module";
 import { SharedModule } from "../shared/shared.module";
 import { GenderFormComponent, UserFormComponent, UserListComponent } from "./components";
 import { UsersRegistersComponent } from "./pages";
@@ -18,6 +19,7 @@ import { UserRoutingModule } from "./user-routing.module";
   imports: [
     UserRoutingModule,
     SharedModule,
+    EnterpriseModule,
 ],
   exports: [
     GenderFormComponent,

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { debounceTime, distinctUntilChanged, filter, Observable, of, Subscription, switchMap, tap } from "rxjs";
+
 import { ToastService } from "../../../shared/components/toast/toast.service";
 import { Enterprise } from "../../models/enterprise.model";
 import { EnterpriseService } from "../../services/enterprise.service";
@@ -46,7 +47,7 @@ export class EnterpriseListComponent implements OnInit, OnDestroy {
 
   private loadEnterprises() {
      const subscription = this.loadEnterprises$().subscribe({
-      error: (err: Error) => this.toastService.error(`Erro ao carregar a lista de usuários. ${err.message}`),
+      error: (err: Error) => this.toastService.error(`Erro ao carregar a lista de EMPRESAS. ${err.message}`),
     });
     this.unsubscriptions$.push(subscription);
   }
@@ -113,7 +114,8 @@ export class EnterpriseListComponent implements OnInit, OnDestroy {
 
   public openEnterpriseForm(enterprise: Enterprise | null, mode: TypeForm = 'create') {
     const modal = this.modal.open(EnterpriseFormComponent, { size: 'xl' });
-    modal.componentInstance.mode = mode;
+    // modal.componentInstance.mode = mode;
+    modal.componentInstance.mode = 'create';
     modal.componentInstance.enterprise = enterprise || {};
     modal.closed.pipe(switchMap(()=> this.loadEnterprises$())).subscribe();
   }

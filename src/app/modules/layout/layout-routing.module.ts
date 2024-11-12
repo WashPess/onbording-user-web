@@ -9,6 +9,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'home',  component: HomeComponent },
+      { path: 'enterprise', loadChildren: ()=> import('../enterprise/enterprise.module').then( m => m.EnterpriseModule) },
       { path: '', loadChildren: ()=> import('../user/user.module').then( m => m.UserModule) },
     ]
   },

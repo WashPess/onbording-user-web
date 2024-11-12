@@ -1,8 +1,9 @@
-import { HttpErrorResponse } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subscription, finalize, of, tap } from "rxjs";
+
+import { HttpErrorResponse } from "@angular/common/http";
 import { ToastService } from "../../../shared/components/toast/toast.service";
 import { Enterprise } from "../../models/enterprise.model";
 import { EnterpriseService } from "../../services/enterprise.service";
@@ -87,6 +88,7 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log('MODE', this.modeLocal)
     this.changesForm();
     this.setEnterprise();
   }
