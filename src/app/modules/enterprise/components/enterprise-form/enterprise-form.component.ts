@@ -65,6 +65,11 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
     return this.form.get('corporateReason');
   }
 
+
+  public get communicationChannel() {
+    return this.form.get('communicationChannel');
+  }
+
   public get optin() {
     return this.form.get('optin');
   }
@@ -76,6 +81,7 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
     address: new FormControl(''),
     cnpj: new FormControl(''),
     corporateReason: new FormControl(''),
+    communicationChannel: new FormControl(<string[]> []),
     optin: new FormControl(false),
   });
 
@@ -98,7 +104,7 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
   }
 
   private setEnterprise() {
-    this.form.patchValue(this.enterprise);
+    this.form.patchValue(this.enterprise as any);
     if (this.isModeEdit) {
       this.form.get("document")?.disable();
     }
@@ -134,7 +140,7 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const enterprise: Enterprise = this.form.value as Enterprise;
+    const enterprise: Enterprise = this.form.value as any as Enterprise;
     this.form.disable();
 
     if (this.isModeEdit) {
@@ -189,5 +195,15 @@ export class EnterpriseFormComponent implements OnInit, OnDestroy {
 
   private close() {
     this.activeModal.close(this.form.value);
+  }
+
+  public checkedCommunication(state: boolean, channel: string) {
+    const comm = this.form.get('communicationChannel');
+    const values = comm?.value || [];
+    const valuesFiltred = values.filter((v: string)=> v != channel);
+    if (state) {
+      valuesFiltred.push(channel);
+    }
+    comm?.setValue(valuesFiltred);
   }
 }

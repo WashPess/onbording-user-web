@@ -10,6 +10,7 @@ const routes: Routes = [
     children: [
       { path: 'home',  component: HomeComponent },
       { path: 'enterprise', loadChildren: ()=> import('../enterprise/enterprise.module').then( m => m.EnterpriseModule) },
+      { path: 'sound', loadChildren: ()=> import('../soundtrack/soundtrack.module').then( m => m.SoundtrackModule) },
       { path: '', loadChildren: ()=> import('../user/user.module').then( m => m.UserModule) },
     ]
   },

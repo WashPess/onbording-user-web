@@ -64,7 +64,7 @@
         >
 
         <div *ngIf="address?.invalid && (address?.dirty || address?.touched)" class="form-text text-danger">
-          <div *ngIf="address?.errors?.['required']">É necessario preencher o address.</div>
+          <div *ngIf="address?.errors?.['required']">É necessario preencher o endereço.</div>
           <div *ngIf="address?.errors?.['address']"> O address deve ser válido. </div>
           <div *ngIf="address?.errors?.['hasdomain']"> O email deve ter um domínio válido. </div>
         </div>
@@ -114,6 +114,26 @@
         </div>
 
       </div>
+
+      <div class="col-4 mb-3">
+        <label class="form-label">Canais de Comunicação <span class="text-danger">*</span></label>
+      </div>
+
+
+      <div class="col-8 mb-3 d-flex gap-4">
+
+        <div class="form-check">
+          <input #emailCheck class="form-check-input" type="checkbox" id="emailCheck" (change)="checkedCommunication(emailCheck.checked, 'email')">
+          <label class="form-check-label" for="emailCheck">Email</label>
+        </div>
+
+        <div class="form-check">
+          <input #phoneCheck class="form-check-input" type="checkbox" id="phoneCheck" (change)="checkedCommunication(phoneCheck.checked, 'telefone')">
+          <label class="form-check-label" for="phoneCheck">Telefone</label>
+        </div>
+
+      </div>
+
 
       <ng-container *ngIf="!isModeEdit">
         <div class="col-4 mb-3">

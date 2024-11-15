@@ -1,0 +1,28 @@
+
+
+.volume-container {
+  border: solid 1px #F00;
+  height: 100%;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.volume-slide {
+  height: 100%;
+  border: solid 1px #FF0;
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.volume-controls {
+  height: 80px;
+  border: solid 1px #00F;
+}
+
+.volume-knob {
+  height: 80px;
+  width: 34px;
+  border: solid 1px #0F0;
+}

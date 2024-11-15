@@ -114,8 +114,7 @@ export class EnterpriseListComponent implements OnInit, OnDestroy {
 
   public openEnterpriseForm(enterprise: Enterprise | null, mode: TypeForm = 'create') {
     const modal = this.modal.open(EnterpriseFormComponent, { size: 'xl' });
-    // modal.componentInstance.mode = mode;
-    modal.componentInstance.mode = 'create';
+    modal.componentInstance.mode = mode;
     modal.componentInstance.enterprise = enterprise || {};
     modal.closed.pipe(switchMap(()=> this.loadEnterprises$())).subscribe();
   }

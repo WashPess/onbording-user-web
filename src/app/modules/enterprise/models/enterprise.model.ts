@@ -6,6 +6,7 @@ export interface Enterprise {
   address: string,
   cnpj: string,
   corporateReason: string,
+  communicationChannel: string[],
   optin: boolean,
   status: string,
   createdAt: Date,

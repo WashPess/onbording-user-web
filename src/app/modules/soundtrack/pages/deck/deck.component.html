@@ -1,0 +1,43 @@
+<div class="row bg-black text-white">
+
+  <div class="col-12 p-4">
+    <h1 class="text-center">DECK - Jogando um RPG bostal</h1>
+  </div>
+
+  <div class="col-11 p-4 d-flex flex-wrap gap-3 justify-content-evenly">
+
+    <ng-container *ngFor="let music of catalog">
+      <app-track
+        [title]="music.title"
+        [description]="music.description"
+        [source]="music.source"
+        (playChange)="playToggle()"
+        [stop]="playersToggle"
+      ></app-track>
+    </ng-container>
+
+  </div>
+
+  <div class="col-1">
+
+    <div class="volume-container">
+
+      <div class="volume-slide">
+        <div class="volume-guide"></div>
+        <div class="volume-knob dragme" draggable="true" >
+
+        </div>
+      </div>
+
+      <div class="volume-controls">
+
+        <button class="volume-kno">A</button>
+        <button class="volume-kno">B</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

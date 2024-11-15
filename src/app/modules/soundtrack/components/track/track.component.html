@@ -1,0 +1,27 @@
+
+<button class="tile neon" (click)="play()" [ngClass]="{ 'played': played} ">
+
+  <div class="d-flex flex-column justify-content-around align-items-center h-100">
+
+    <span>{{title}}</span>
+
+    <ng-container *ngIf="paused">
+      <span>{{description}}</span>
+    </ng-container>
+
+      <ng-container *ngIf="played">
+        <span>{{labelTimecode(10)}}</span>
+      </ng-container>
+
+    <span class="align-content-end">{{labelTimecode(timecode)}} / {{labelTimecode(timecodeTotal)}}</span>
+
+  </div>
+
+  <div class="h-100 m-0 p-0">
+    <div class="volume-container">
+      <div class="volume-bar" [ngStyle]="{ 'height.%': volume }"></div>
+    </div>
+
+  </div>
+
+</button>

@@ -21,7 +21,7 @@ import { EnterpriseRegistersComponent } from "./pages";
   exports: [
     EnterpriseComponent,
     SharedModule,
-    // EnterpriseListComponent,
+    EnterpriseListComponent,
   ]
 })
 export class EnterpriseModule {}

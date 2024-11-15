@@ -23,7 +23,6 @@ import { DocumentMaskDirective } from "./directives";
     CommonModule,
     NgbToastModule,
     NgbModalModule,
-    // BsDropdownModule.forRoot(),
 	],
   exports: [
     ReactiveFormsModule,
@@ -36,7 +35,6 @@ import { DocumentMaskDirective } from "./directives";
     CommonModule,
     NgbModalModule,
     NgbToastModule,
-    // BsDropdownModule,
     ReactiveFormsModule,
     DocumentMaskDirective,
     ToastComponent,
