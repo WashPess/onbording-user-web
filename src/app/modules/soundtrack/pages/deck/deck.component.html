@@ -1,43 +1,29 @@
-<div class="row bg-black text-white">
+<div class="row p-0 m-0">
 
-  <div class="col-12 p-4">
+  <div class="col-12 px-4 py-2">
     <h1 class="text-center">DECK - Jogando um RPG bostal</h1>
   </div>
 
-  <div class="col-11 p-4 d-flex flex-wrap gap-3 justify-content-evenly">
+  <div class="col-12 row p-0 m-0 bg-black text-white rounded-4 mb-4">
 
-    <ng-container *ngFor="let music of catalog">
-      <app-track
-        [title]="music.title"
-        [description]="music.description"
-        [source]="music.source"
-        (playChange)="playToggle()"
-        [stop]="playersToggle"
-      ></app-track>
-    </ng-container>
+    <div class="col-11 p-4 d-flex flex-wrap gap-3 justify-content-evenly">
+      <ng-container *ngFor="let music of catalog">
+        <app-track
+          [title]="music.title"
+          [description]="music.description"
+          [source]="music.source"
+          (playChange)="playToggle()"
+          (audioChange)="audioToggle($event)"
+          [stop]="playersToggle"
+        ></app-track>
+      </ng-container>
+    </div>
 
-  </div>
-
-  <div class="col-1">
-
-    <div class="volume-container">
-
-      <div class="volume-slide">
-        <div class="volume-guide"></div>
-        <div class="volume-knob dragme" draggable="true" >
-
-        </div>
-      </div>
-
-      <div class="volume-controls">
-
-        <button class="volume-kno">A</button>
-        <button class="volume-kno">B</button>
-
-      </div>
-
+    <div class="col-1 py-4">
+      <app-volume [audio]="audioCurrent"></app-volume>
     </div>
 
   </div>
+
 
 </div>

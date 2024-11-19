@@ -2,7 +2,10 @@ import { CommonModule, JsonPipe, NgFor } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+
+import { CdkDrag } from '@angular/cdk/drag-drop';
 import { NgbModalModule, NgbModule, NgbToast, NgbToastModule } from "@ng-bootstrap/ng-bootstrap";
+
 import { AlertDialogComponent, ToastComponent } from "./components";
 import { DocumentMaskDirective } from "./directives";
 
@@ -14,8 +17,8 @@ import { DocumentMaskDirective } from "./directives";
     DocumentMaskDirective,
   ],
   imports: [
-    ReactiveFormsModule,
     NgFor,
+    CdkDrag,
     JsonPipe,
     NgbModule,
     FormsModule,
@@ -23,10 +26,11 @@ import { DocumentMaskDirective } from "./directives";
     CommonModule,
     NgbToastModule,
     NgbModalModule,
+    ReactiveFormsModule,
 	],
   exports: [
-    ReactiveFormsModule,
     NgFor,
+    CdkDrag,
     JsonPipe,
     NgbToast,
     NgbModule,
@@ -36,7 +40,9 @@ import { DocumentMaskDirective } from "./directives";
     NgbModalModule,
     NgbToastModule,
     ReactiveFormsModule,
+
     DocumentMaskDirective,
+
     ToastComponent,
     AlertDialogComponent,
   ]

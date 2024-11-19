@@ -7,6 +7,7 @@ import { LayoutComponent } from './layout.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { UserModule } from "../user/user.module";
 import { ArticleComponent, AsideComponent, FooterComponent, HeaderComponent, MainComponent } from "./components";
 import { HomeComponent } from "./pages";
 
@@ -22,9 +23,10 @@ import { HomeComponent } from "./pages";
 	],
 	imports: [
     ReactiveFormsModule,
-		LayoutRoutingModule,
+    LayoutRoutingModule,
     SharedModule,
-	],
+    UserModule
+],
 	exports: [
     ReactiveFormsModule,
 		SharedModule,

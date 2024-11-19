@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
+
+
 @Component({
   selector: 'app-deck',
   templateUrl: './deck.component.html',
@@ -8,9 +10,14 @@ import { Component, OnInit } from "@angular/core";
 export class DeckComponent implements OnInit {
 
   public playersToggle= false;
+  public audioCurrent: HTMLAudioElement = new Audio();
 
-  playToggle() {
+  public playToggle() {
     this.playersToggle = !this.playersToggle
+  }
+
+  public audioToggle(audio: HTMLAudioElement) {
+    this.audioCurrent = audio;
   }
 
   public catalog = [
@@ -36,25 +43,6 @@ export class DeckComponent implements OnInit {
       this.initDragAndDrop();
   }
 
-  public initDragAndDrop() {
-
-    let isDown = false;
-    const dragMe = document.querySelector('.dragme') as HTMLElement;
-    dragMe?.addEventListener('mousedown', function() {
-      isDown = true;
-    });
-
-    window.addEventListener('mouseup', function() {
-      isDown = false;
-    });
-
-    window.addEventListener('mousemove', function(event) {
-      if (isDown) {
-        dragMe.style.top = event.clientY + 'px';
-        dragMe.style.left = event.clientX + 'px';
-      }
-    });
-
-  }
+  public initDragAndDrop() {}
 
 }

@@ -31,6 +31,7 @@ export class TrackComponent implements OnInit {
   }
 
   @Output() playChange = new EventEmitter<boolean>() ;
+  @Output() audioChange = new EventEmitter<HTMLAudioElement>() ;
 
   public playing = false;
 
@@ -48,7 +49,8 @@ export class TrackComponent implements OnInit {
   ngOnInit(): void {
     this.audioBuilder();
   }
-    //Factory
+
+  //Factory
   private audioBuilder() {
     this.audio = new Audio()
     this.audio.src = this.source;
@@ -64,6 +66,7 @@ export class TrackComponent implements OnInit {
     this.runElapsedPlaying()
     if(playtoogle) {
       this.audio.play();
+      this.audioChange.emit(this.audio);
       return;
     }
     this.pause();
