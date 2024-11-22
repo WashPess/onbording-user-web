@@ -1,12 +1,15 @@
-
-
 .knob-boundary {
-  width: 100%;
+  width: 48px;
   height: 540px;
-  max-width: 100%;
-  border: dotted #ccc 2px;
+  position: relative;
+  background: linear-gradient(to top, #00f, #0ff, #f0f);
+  box-shadow: 0 0 4px #00f, 0 0 8px #0ff, 0 0 16px #f0f;
+  border-radius: 38px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
 
 .knob-box {
   --size-knob: 102px;
@@ -14,7 +17,6 @@
   top: calc(100% - var(--size-knob));
   width: 100%;
   height: var(--size-knob);
-  border: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   cursor: move;
   display: inline-flex;
@@ -25,6 +27,7 @@
   position: relative;
   z-index: 1;
   box-sizing: border-box;
+  border-radius: 38px;
   transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
               0 2px 2px 0 rgba(0, 0, 0, 0.14),
