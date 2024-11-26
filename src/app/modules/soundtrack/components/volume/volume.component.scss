@@ -14,11 +14,13 @@
 .knob-box {
   --size-knob: 102px;
 
-  top: calc(100% - var(--size-knob));
+  // top: calc(100% - var(--size-knob)); // coloca o knob no fim da div
+  top: 0px; // coloca o knob no fim da div
+  transform: translate3d(0px, 0px, 0px);
   width: 100%;
   height: var(--size-knob);
   color: rgba(0, 0, 0, 0.87);
-  cursor: move;
+  cursor: pointer;
   display: inline-flex;
   justify-content: center;
   align-items: center;

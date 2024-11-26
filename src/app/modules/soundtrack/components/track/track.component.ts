@@ -27,7 +27,7 @@ export class TrackComponent implements OnInit {
     if(this.playing) {
       return;
     }
-    this.clear()
+    this.stoppage();
   }
 
   @Output() playChange = new EventEmitter<boolean>() ;
@@ -79,9 +79,13 @@ export class TrackComponent implements OnInit {
     this.audio.pause();
   }
 
-  public clear() {
+  public stoppage() {
     this.pause();
     this.audio.currentTime = 0;
+  }
+
+  public clear() {
+    this.stoppage()
     this.audio.volume = 1;
   }
 

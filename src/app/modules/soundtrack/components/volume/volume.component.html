@@ -2,7 +2,14 @@
 
 <div class="knob-boundary">
 
-  <div class="knob-box" cdkDragBoundary=".knob-boundary" cdkDragLockAxis="y" [cdkDragFreeDragPosition]="dragPosition" cdkDrag (cdkDragMoved)="knobChangesByDrag($event)" >
+  <div
+    cdkDrag
+    class="knob-box"
+    cdkDragLockAxis="y"
+    cdkDragBoundary=".knob-boundary"
+    [cdkDragFreeDragPosition]="dragPosition"
+    (cdkDragMoved)="knobChangesByDrag($event)"
+  >
     <span>{{parseToInt(percent)}}%</span>
   </div>
 

@@ -16,8 +16,11 @@ export class VolumeComponent implements OnInit {
     }
 
     this.audioCurrent = au;
+
     this.volume = this.normalizeVolume(this.audioCurrent.volume);
-    this.changeKnobPositionByPercent(this.updatePercentByVolume(this.volume));
+    this.updatePercentByVolume(this.volume)
+    this.changeKnobPositionByPercent(this.adjustLogCurveByVolume(this.volume));
+    console.log("VOL: ", this.volume);
   };
 
   public volume: number = 1; // 0 - 1
@@ -37,6 +40,17 @@ export class VolumeComponent implements OnInit {
     this.getKnobElement();
   }
 
+  // quando knob sofre mudança
+  public knobChangesByDrag(event: CdkDragMove<any>){
+    this.getKnobPosition();
+    this.percentageAfterDraggingKnob(this.boundaryClient.height - this.knobClient.height)
+    this.updateVolumeByPercent(this.percent);
+  }
+
+  public parseToInt(percent: number): number {
+    return parseInt(String(percent), 10);
+  }
+
   private getBoundaryElement() {
     this.boundaryElement = document.querySelector('.knob-boundary') as HTMLElement;
     this.boundaryClient = this.boundaryElement.getBoundingClientRect();
@@ -50,23 +64,20 @@ export class VolumeComponent implements OnInit {
   public changeKnobPositionByPercent(percent: number = 100) {
     this.getBoundaryElement();
     this.getKnobElement();
-    this.knobElement.style.top = `${this.calcPositionKnobByPercent(percent)}px`;
-  }
-
-  public changePosition() {
-    this.dragPosition = {x: this.dragPosition.x , y: this.dragPosition.y };
-  }
-
-  // quando knob sofre mudança
-  public knobChangesByDrag(event: CdkDragMove<any>){
-    this.getKnobPosition();
-    this.percentageAfterDraggingKnob(this.boundaryClient.height - this.knobClient.height)
-    this.updateVolumeByPercent(this.percent);
+    this.dragPosition = { x: 0, y: this.calcPositionKnobByPercent(percent) };
   }
 
   private calcPositionKnobByPercent(percent: number): number {
     const height = (this.boundaryClient.height - 1) - this.knobClient.height;
-    return (height - (height / 100) * percent);
+    const position = height - (height / 100) * percent;
+    return Math.round(position);
+  }
+
+  private updatePercentByVolume(volume: number): number {
+    this.percent = this.parseVolumeToPercent(volume);
+    this.volume = this.normalizeVolume(volume);
+    this.audioCurrent.volume = this.volume;
+    return this.percent;
   }
 
   private getKnobPosition() {
@@ -79,26 +90,11 @@ export class VolumeComponent implements OnInit {
     return this.percent;
   }
 
-  public parseToInt(percent: number): number {
-    return parseInt(String(percent), 10);
-  }
-
   private updateVolumeByPercent(percent: number): number {
-    this.volume = this.adjustLogCurve(this.percent);
+    this.volume = this.adjustLogCurveByPercent(this.percent);
     this.percent = this.normalizePercent(percent);
     this.audioCurrent.volume = this.volume;
     return this.volume;
-  }
-
-  private updatePercentByVolume(volume: number): number {
-    this.percent = this.parseVolumeToPercent(volume);
-    this.volume = this.normalizeVolume(volume);
-    this.audioCurrent.volume = this.volume;
-    return this.percent;
-  }
-
-  private parsePercentToVolume(percent: number): number {
-    return this.normalizePercent(percent) / 100;
   }
 
   private normalizePercent(percent: number): number {
@@ -120,6 +116,7 @@ export class VolumeComponent implements OnInit {
 
   private normalizeVolume(volume: number): number {
 
+
     if(volume > 1) {
       return 1;
     }
@@ -131,13 +128,21 @@ export class VolumeComponent implements OnInit {
     return Number(volume);
   }
 
-  private adjustLogCurve(percent: number): number {
-    const normalizePercent = percent * 0.1;
-    const percentageWithOffset = (normalizePercent + 1);
-    const percentageWithVariance = percentageWithOffset * 0.91;
-    return this.normalizeVolume(Math.log10(percentageWithVariance));
+  private adjustLogCurveByPercent(percent: number): number {
+    const baseToPercent = 1.5;
+    const offset = ((0.317 / 100) * ((100 - percent) + 1));
+    const axisX = (baseToPercent / 100) * percent;
+    const axisY = (Math.pow(10, (axisX - (baseToPercent - 1))) - offset);
+    const normalizeAxisY = axisY * 0.1;
+    return this.normalizeVolume(normalizeAxisY);
   }
 
-  //JA ERA MEU FONE -- blz'
+  private adjustLogCurveByVolume(volume: number): number {
+    const offset = (1 * (1 - volume));
+    const normalizeVolumeTolog = (Math.pow(volume, Math.sqrt(0.665)) * 10) + offset;
+    const percent = Math.log10(normalizeVolumeTolog) * 100;
+    return this.normalizePercent(percent);
+  }
 
 }
+
