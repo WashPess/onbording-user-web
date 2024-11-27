@@ -59,8 +59,8 @@
 .volume-container {
   border: solid 1px rgba(255,255,255, 0.3);
   width: 8px;
-  height: calc(100% - 8px);
-  margin: 4px -4px 4px 0;
+  height: calc(100% - 36px);
+  margin: 4px 0px;
   border-radius: 4px;
   overflow: hidden;
   transform: rotate(180deg);
@@ -86,6 +86,48 @@
   opacity: 0.8;
 }
 
+.tap-hold {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1px 0 0 6px;
+
+  * {
+    background-color: transparent !important;
+  }
+  .form-check {
+    .form-check-input {
+      max-height: 12px;
+      max-width: 22px;
+    }
+  }
+}
+
+.hint-hover .hint-container {
+   visibility: hidden;
+}
+
+.hint-hover:hover .hint-container {
+  visibility: visible;
+}
+
+.hint-container {
+  z-index: 10000 !important;
+  width: 100%;
+}
+
+.hint-body {
+  position: absolute;
+  z-index: 20000 !important;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.98);
+  transform: translateY(-12px);
+  color: rgba(0,0,0,1);
+  width: 100%;
+
+}
+
 @keyframes play-runned {
   0%   { filter: brightness(100); }
   50%  {filter: brightness(50); }
@@ -94,4 +136,8 @@
 @keyframes pause-runned {
   0%   { opacity: 0.8; outline: 2px; }
   50%  { opacity: 0.7; outline: 8px; }
+}
+
+.track-active {
+  color: rgba(0, 200, 0, 0.9);
 }

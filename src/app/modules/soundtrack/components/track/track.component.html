@@ -1,7 +1,15 @@
 
-<button class="tile neon" (click)="play()" [ngClass]="{ 'played': played} ">
+<button class="tile neon" (click)="play()" [ngClass]="{ 'played': played}">
 
-  <div class="d-flex flex-column justify-content-around align-items-center h-100">
+  <div class="d-flex flex-column flex-fill justify-content-around align-items-center h-100 p-1">
+
+    <div class="tap-hold">
+
+      <a class="form-check form-switch" (click)="$event.stopPropagation()">
+        <input #switchHold class="form-check-input" type="checkbox" id="hold" (change)="changeHold(switchHold.checked)">
+      </a>
+
+    </div>
 
     <span>{{title}}</span>
 
@@ -9,19 +17,39 @@
       <span>{{description}}</span>
     </ng-container>
 
-      <ng-container *ngIf="played">
-        <span>{{labelTimecode(10)}}</span>
-      </ng-container>
+    <ng-container *ngIf="played">
+      <span>{{labelTimecode(regress)}}</span>
+    </ng-container>
 
-    <span class="align-content-end">{{labelTimecode(timecode)}} / {{labelTimecode(timecodeTotal)}}</span>
+    {{parseInt(positionPercent)}}%
+
+    <div>
+      <span class="align-content-end fs-8">{{labelTimecode(timecode)}} / {{labelTimecode(timecodeTotal)}}</span>
+      <a (click)="$event.stopPropagation(); changeReapeat()">
+        <span class="ms-2">
+          <i class="bi bi-repeat" [ngClass]="{ 'track-active': repeated }"></i>
+        </span>
+      </a>
+    </div>
 
   </div>
 
-  <div class="h-100 m-0 p-0">
+  <div class="h-100 m-0 p-0 me-1">
     <div class="volume-container">
       <div class="volume-bar" [ngStyle]="{ 'height.%': volume }"></div>
     </div>
+    <div class="hint-hover d-flex justify-content-center">
+      <i class="bi bi-gear fs-8"></i>
 
+      <div class="hint-container">
+
+        <div class="hint-body rounded p-2">
+          <input #rgm type="range" class="form-range" min="0" max="100" step="1" id="range-music" value="0" (input)="changeRangeMusic(rgm.value)">
+        </div>
+
+      </div>
+
+    </div>
   </div>
 
 </button>

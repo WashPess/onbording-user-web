@@ -16,12 +16,16 @@ export class TrackComponent implements OnInit {
   @Input() timecode = 0; // tempo atual
   @Input() timecodeTotal = 0; // tempo atual
   @Input() regress = 0;  // tempo restante
+  @Input() positionPercent = 0;  // tempo restante
 
   @Input() played = false;  // estado da execução
   @Input() paused = true;   // estado da execução
 
   @Input() timeStart = false;   // timecode de início
   @Input() timeEnd = false;     // timecode de fim
+
+  @Input() holded = false;      // se a musica deve continuar tocando quando der play em outra
+  @Input() repeated = false;    // muda o estado de repetiçao
 
   @Input() set stop(stop: boolean) {
     if(this.playing) {
@@ -55,9 +59,10 @@ export class TrackComponent implements OnInit {
     this.audio = new Audio()
     this.audio.src = this.source;
     this.volume =  (this.audio.volume * 100);
-    this.audio.ontimeupdate = () => this.timecode = this.audio.currentTime;
+    this.audio.ontimeupdate = () => this.updateTimeCode();
     this.audio.ondurationchange = () => this.timecodeTotal = this.audio.duration;
     this.audio.onvolumechange = ()=> this.volume =  (this.audio.volume * 100);
+    this.audio.onended = ()=> this.initPlayToReapet();
   }
 
   public play() {
@@ -80,6 +85,9 @@ export class TrackComponent implements OnInit {
   }
 
   public stoppage() {
+    if(this.holded) {
+      return;
+    }
     this.pause();
     this.audio.currentTime = 0;
   }
@@ -118,6 +126,41 @@ export class TrackComponent implements OnInit {
     this.playing = true;
     setTimeout(() => this.playing = false, 20);
   }
+
+  private updateTimeCode() {
+    this.timecode = this.audio.currentTime;
+    this.regress = this.timecodeTotal - this.timecode;
+    this.positionPercent = this.updateTimeToPercent(this.timecode);
+  }
+
+  public changeHold(state: boolean) {
+    this.holded = state;
+  }
+
+  public changeReapeat() {
+    this.repeated = !this.repeated;
+  }
+
+  private initPlayToReapet() {
+    if(!this.repeated) {
+      return;
+    }
+    setTimeout(()=> this.play(), 10);
+  }
+
+  public changeRangeMusic(range: string) {
+    console.log("RANGE: ", range);
+  }
+
+  private updateTimeToPercent(timecode: number) {
+    this.positionPercent = (this.timecodeTotal / 100) * timecode;
+    return this.positionPercent;
+  }
+
+  public parseInt(n: number) {
+    return  parseInt(String(n), 10);
+  }
+
 
 }
 
