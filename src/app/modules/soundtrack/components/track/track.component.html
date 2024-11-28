@@ -38,18 +38,27 @@
     <div class="volume-container">
       <div class="volume-bar" [ngStyle]="{ 'height.%': volume }"></div>
     </div>
-    <div class="hint-hover d-flex justify-content-center">
+    <a class="hint-hover d-flex justify-content-center" (click)="$event.stopPropagation();">
       <i class="bi bi-gear fs-8"></i>
 
       <div class="hint-container">
 
         <div class="hint-body rounded p-2">
-          <input #rgm type="range" class="form-range" min="0" max="100" step="1" id="range-music" value="0" (input)="changeRangeMusic(rgm.value)">
+          <input #rgm
+            min="0"
+            max="100"
+            type="range"
+            step="0.000001"
+            id="range-music"
+            class="form-range"
+            [value]="positionPercent"
+            (input)="changeRangeMusic(rgm.value)"
+          >
         </div>
 
       </div>
 
-    </div>
+    </a>
   </div>
 
 </button>

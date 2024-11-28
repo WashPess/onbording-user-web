@@ -145,15 +145,18 @@ export class TrackComponent implements OnInit {
     if(!this.repeated) {
       return;
     }
-    setTimeout(()=> this.play(), 10);
+    const that = this;
+    this.stoppage();
+    setTimeout(()=> that.play(), 2);
   }
 
   public changeRangeMusic(range: string) {
-    console.log("RANGE: ", range);
+    const timecode = Math.ceil((this.timecodeTotal / 100)) * parseFloat(range);
+    this.audio.currentTime = timecode;
   }
 
   private updateTimeToPercent(timecode: number) {
-    this.positionPercent = (this.timecodeTotal / 100) * timecode;
+    this.positionPercent = (100 / this.timecodeTotal) * timecode;
     return this.positionPercent;
   }
 

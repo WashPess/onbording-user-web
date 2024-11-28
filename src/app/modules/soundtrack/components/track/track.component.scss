@@ -72,7 +72,7 @@
   background-color: currentColor;
 }
 
-.played {
+.played:not(a *) {
   animation-name: play-runned;
   animation-duration: 0.8s;
   animation-iteration-count: infinite;
@@ -80,7 +80,7 @@
 
 .paused {
   animation-name: pause-runned;
-  animation-duration: 1.2s;
+  animation-duration: 2.0s;
   animation-iteration-count: infinite;
   outline: solid 2px #F00;
   opacity: 0.8;
@@ -104,7 +104,7 @@
 }
 
 .hint-hover .hint-container {
-   visibility: hidden;
+  visibility: hidden;
 }
 
 .hint-hover:hover .hint-container {
@@ -128,9 +128,14 @@
 
 }
 
+.track-active {
+  color: rgba(0, 200, 0, 0.9);
+}
+
+
 @keyframes play-runned {
-  0%   { filter: brightness(100); }
-  50%  {filter: brightness(50); }
+  0%   { background-color: rgba(255,255,255, 0.2);}
+  50%  { background-color: rgba(255,255,255, 0.05); }
 }
 
 @keyframes pause-runned {
@@ -138,6 +143,3 @@
   50%  { opacity: 0.7; outline: 8px; }
 }
 
-.track-active {
-  color: rgba(0, 200, 0, 0.9);
-}
