@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { StorageDB } from "../../../shared/utils/storagedb";
+import { Str } from "../../../shared/utils/str";
 
 @Component({
   selector: 'app-track',
@@ -7,12 +9,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 })
 export class TrackComponent implements OnInit {
 
-  @Input() title = 'Evidências';
-  @Input() description = 'Chitãozinho e Xororó';
-  @Input() source = '1.mp3';
+  @Input() title = '';
+  @Input() description = '';
+  @Input() source = '';
 
   @Input() progress = 0; // porcentagem de progresão
-  @Input() volume = 50; // porcentagem de progresão
+  @Input() volume = 0; // porcentagem de progresão
   @Input() timecode = 0; // tempo atual
   @Input() timecodeTotal = 0; // tempo atual
   @Input() regress = 0;  // tempo restante
@@ -52,6 +54,7 @@ export class TrackComponent implements OnInit {
 
   ngOnInit(): void {
     this.audioBuilder();
+    this.readFeature();
   }
 
   //Factory
@@ -72,6 +75,7 @@ export class TrackComponent implements OnInit {
     if(playtoogle) {
       this.audio.play();
       this.audioChange.emit(this.audio);
+      this.saveFeature();
       return;
     }
     this.pause();
@@ -82,6 +86,7 @@ export class TrackComponent implements OnInit {
     this.paused = true;
     this.played = false;
     this.audio.pause();
+    // this.saveFeature(); // TODO: reset o play indevidamente
   }
 
   public stoppage() {
@@ -90,6 +95,7 @@ export class TrackComponent implements OnInit {
     }
     this.pause();
     this.audio.currentTime = 0;
+    // this.saveFeature(); // TODO: reset o play indevidamente
   }
 
   public clear() {
@@ -135,10 +141,12 @@ export class TrackComponent implements OnInit {
 
   public changeHold(state: boolean) {
     this.holded = state;
+    this.saveFeature();
   }
 
   public changeReapeat() {
     this.repeated = !this.repeated;
+    this.saveFeature();
   }
 
   private initPlayToReapet() {
@@ -155,6 +163,10 @@ export class TrackComponent implements OnInit {
     this.audio.currentTime = timecode;
   }
 
+  public changeRangeWhenDrop() {
+    this.saveFeature();
+  }
+
   private updateTimeToPercent(timecode: number) {
     this.positionPercent = (100 / this.timecodeTotal) * timecode;
     return this.positionPercent;
@@ -162,6 +174,42 @@ export class TrackComponent implements OnInit {
 
   public parseInt(n: number) {
     return  parseInt(String(n), 10);
+  }
+
+  private saveFeature() {
+    const feature = {
+      title: this.title,
+      description: this.description,
+      source: this.source,
+      volume: this.volume,
+      currentTime: this.audio.currentTime,
+      holded: this.holded,
+      repeated: this.repeated,
+      timeStart: this.timeStart,
+      timeEnd: this.timeEnd,
+    }
+
+    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
+    StorageDB.save(key, feature)
+  }
+
+  private readFeature() {
+    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
+    const feature = StorageDB.read(key);
+    const { title, description, source, volume, currentTime, holded, repeated, timeStart, timeEnd } = feature;
+
+    this.title = title || this.title;
+    this.description = description || this.description;
+    this.source = source || this.source;
+    this.volume = volume || this.volume;
+    this.holded = holded || this.holded;
+    this.repeated = repeated || this.repeated;
+    this.timeStart = timeStart || this.timeStart;
+    this.timeEnd = timeEnd || this.timeEnd;
+
+    this.audio.src = this.source;
+    this.audio.volume = (this.volume / 100);
+    this.audio.currentTime = currentTime || this.audio.currentTime;
   }
 
 

@@ -29,13 +29,16 @@
     padding: 0;
   }
 
+  a {
+    color: inherit;
+  }
+
   .number {
     font-weight: 700;
   }
 
   .symbol {
     font-size: 4rem;
-    // font-family: 'Neon Glow';
     text-shadow: 0 0 var(--blur) var(--glow);
   }
 
@@ -118,13 +121,21 @@
 
 .hint-body {
   position: absolute;
-  z-index: 20000 !important;
   bottom: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.98);
-  transform: translateY(-12px);
+  background-color: rgba(255, 255, 255, 0);
+  transform: translateY(6px);
   color: rgba(0,0,0,1);
-  width: 100%;
+  width: calc(100% - 12px);
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 36px;
+
+  input {
+    padding: 0 8px;
+    margin: 0;
+    height: 0px;
+   }
 
 }
 
@@ -142,4 +153,3 @@
   0%   { opacity: 0.8; outline: 2px; }
   50%  { opacity: 0.7; outline: 8px; }
 }
-
