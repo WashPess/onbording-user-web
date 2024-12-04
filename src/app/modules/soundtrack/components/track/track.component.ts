@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Debounce } from "../../../shared/utils/debounce";
 import { StorageDB } from "../../../shared/utils/storagedb";
 import { Str } from "../../../shared/utils/str";
+import { MusicListComponent } from "../music-list/music-list.component";
 
 @Component({
   selector: 'app-track',
@@ -13,21 +16,21 @@ export class TrackComponent implements OnInit {
   @Input() description = '';
   @Input() source = '';
 
-  @Input() progress = 0; // porcentagem de progresão
-  @Input() volume = 0; // porcentagem de progresão
-  @Input() timecode = 0; // tempo atual
-  @Input() timecodeTotal = 0; // tempo atual
-  @Input() regress = 0;  // tempo restante
-  @Input() positionPercent = 0;  // tempo restante
+  @Input() progress = 0;          // porcentagem de progresão
+  @Input() volume = 100;          // porcentagem de progresão
+  @Input() timecode = 0;          // tempo atual
+  @Input() timecodeTotal = 0;     // tempo atual
+  @Input() regress = 0;           // tempo restante
+  @Input() positionPercent = 0;   // tempo restante
 
-  @Input() played = false;  // estado da execução
-  @Input() paused = true;   // estado da execução
+  @Input() played = false;        // estado da execução
+  @Input() paused = true;         // estado da execução
 
-  @Input() timeStart = false;   // timecode de início
-  @Input() timeEnd = false;     // timecode de fim
+  @Input() timeStart = false;     // timecode de início
+  @Input() timeEnd = false;       // timecode de fim
 
-  @Input() holded = false;      // se a musica deve continuar tocando quando der play em outra
-  @Input() repeated = false;    // muda o estado de repetiçao
+  @Input() holded = false;        // se a musica deve continuar tocando quando der play em outra
+  @Input() repeated = false;      // muda o estado de repetiçao
 
   @Input() set stop(stop: boolean) {
     if(this.playing) {
@@ -36,36 +39,106 @@ export class TrackComponent implements OnInit {
     this.stoppage();
   }
 
+  @Input() set reset(reset: boolean) {
+    this.clear();
+  }
+
   @Output() playChange = new EventEmitter<boolean>() ;
   @Output() audioChange = new EventEmitter<HTMLAudioElement>() ;
 
   public playing = false;
-
   public audio = new Audio();
+  private debounce: any = ()=> {};
 
   public colors = [
     { color: '#FCEAAC', saturate: '175%' },
     { color: '#FDA802', saturate: '110%' },
     { color: '#B7E7F7', saturate: '200%' },
     { color: '#C4C4C6', saturate: '105%' },
-  ]
+  ];
+
+  constructor(
+    private readonly modal: NgbModal
+  ) {
+
+  }
 
   public currentColor = this.colors[0];
 
   ngOnInit(): void {
     this.audioBuilder();
     this.readFeature();
+
+    setTimeout(()=> this.openMusicList(), 500);
+
   }
 
-  //Factory
+  public changeHold(state: boolean) {
+    this.holded = state;
+    this.saveFeature();
+  }
+
+  public changeReapeat() {
+    this.repeated = !this.repeated;
+    this.saveFeature();
+  }
+
+  public changeRangeMusic(range: string) {
+    const timecode = Math.ceil((this.timecodeTotal / 100)) * parseFloat(range);
+    this.audio.currentTime = timecode;
+  }
+
+  public changeRangeWhenDrop() {
+    this.saveFeature();
+  }
+
+  private changeVolume() {
+    this.volume = (this.audio.volume * 100);
+    if(!this.debounce) {
+      return;
+    }
+    this.debounce();
+  }
+
+  private updateTimeCode() {
+    this.timecode = this.audio.currentTime;
+    this.regress = this.timecodeTotal - this.timecode;
+    this.positionPercent = this.updateTimeToPercent(this.timecode);
+  }
+
+  private updateTimeToPercent(timecode: number) {
+    this.positionPercent = (100 / this.timecodeTotal) * timecode;
+    return this.positionPercent;
+  }
+
   private audioBuilder() {
     this.audio = new Audio()
     this.audio.src = this.source;
-    this.volume =  (this.audio.volume * 100);
-    this.audio.ontimeupdate = () => this.updateTimeCode();
-    this.audio.ondurationchange = () => this.timecodeTotal = this.audio.duration;
-    this.audio.onvolumechange = ()=> this.volume =  (this.audio.volume * 100);
+    this.audio.onloadstart = ()=> this.initLoad();
     this.audio.onended = ()=> this.initPlayToReapet();
+    this.audio.onvolumechange = ()=> this.changeVolume();
+    this.audio.ontimeupdate = () => this.updateTimeCode();
+    this.audio.ondurationchange = () => this.initTimeDuration();
+  }
+
+  private initPlayToReapet() {
+    if(!this.repeated) {
+      return;
+    }
+    const that = this;
+    this.stoppage();
+    setTimeout(()=> that.play(), 2);
+  }
+
+  private initTimeDuration() {
+    this.timecodeTotal = this.audio.duration;
+    this.saveFeature();
+  }
+
+  private initLoad() {
+    this.volume =  (this.audio.volume * 100);
+    this.saveFeature();
+    this.debounce = Debounce(()=> this.saveFeature(), 40);
   }
 
   public play() {
@@ -86,7 +159,7 @@ export class TrackComponent implements OnInit {
     this.paused = true;
     this.played = false;
     this.audio.pause();
-    // this.saveFeature(); // TODO: reset o play indevidamente
+    // this.saveFeature();
   }
 
   public stoppage() {
@@ -95,12 +168,55 @@ export class TrackComponent implements OnInit {
     }
     this.pause();
     this.audio.currentTime = 0;
-    // this.saveFeature(); // TODO: reset o play indevidamente
   }
 
   public clear() {
-    this.stoppage()
     this.audio.volume = 1;
+    this.holded = false;
+    this.repeated = false;
+    // this.saveFeature();
+    this.stoppage()
+  }
+
+  private runElapsedPlaying() {
+    this.playing = true;
+    setTimeout(() => this.playing = false, 20);
+  }
+
+  private saveFeature() {
+    const feature = {
+      title: this.title,
+      description: this.description,
+      source: this.source,
+      volume: this.volume,
+      currentTime: this.audio.currentTime,
+      holded: this.holded,
+      repeated: this.repeated,
+      timeStart: this.timeStart,
+      timeEnd: this.timeEnd,
+    }
+
+    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
+    StorageDB.save(key, feature)
+  }
+
+  private readFeature() {
+    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
+    const feature = StorageDB.read(key)
+    const { title, description, source, volume, currentTime, holded, repeated, timeStart, timeEnd } = feature;
+
+    this.title = title || this.title;
+    this.description = description || this.description;
+    this.source = source || this.source;
+    this.volume = volume || this.volume;
+    this.holded = holded || this.holded;
+    this.repeated = repeated || this.repeated;
+    this.timeStart = timeStart || this.timeStart;
+    this.timeEnd = timeEnd || this.timeEnd;
+
+    this.audio.src = this.source;
+    this.audio.volume = (this.volume / 100);
+    this.audio.currentTime = currentTime || this.audio.currentTime;
   }
 
   private toggleStatePlay() {
@@ -128,92 +244,15 @@ export class TrackComponent implements OnInit {
     return String(counter).padStart(2, '0');
   }
 
-  private runElapsedPlaying() {
-    this.playing = true;
-    setTimeout(() => this.playing = false, 20);
-  }
-
-  private updateTimeCode() {
-    this.timecode = this.audio.currentTime;
-    this.regress = this.timecodeTotal - this.timecode;
-    this.positionPercent = this.updateTimeToPercent(this.timecode);
-  }
-
-  public changeHold(state: boolean) {
-    this.holded = state;
-    this.saveFeature();
-  }
-
-  public changeReapeat() {
-    this.repeated = !this.repeated;
-    this.saveFeature();
-  }
-
-  private initPlayToReapet() {
-    if(!this.repeated) {
-      return;
-    }
-    const that = this;
-    this.stoppage();
-    setTimeout(()=> that.play(), 2);
-  }
-
-  public changeRangeMusic(range: string) {
-    const timecode = Math.ceil((this.timecodeTotal / 100)) * parseFloat(range);
-    this.audio.currentTime = timecode;
-  }
-
-  public changeRangeWhenDrop() {
-    this.saveFeature();
-  }
-
-  private updateTimeToPercent(timecode: number) {
-    this.positionPercent = (100 / this.timecodeTotal) * timecode;
-    return this.positionPercent;
-  }
-
   public parseInt(n: number) {
     return  parseInt(String(n), 10);
   }
 
-  private saveFeature() {
-    const feature = {
-      title: this.title,
-      description: this.description,
-      source: this.source,
-      volume: this.volume,
-      currentTime: this.audio.currentTime,
-      holded: this.holded,
-      repeated: this.repeated,
-      timeStart: this.timeStart,
-      timeEnd: this.timeEnd,
-    }
-
-    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
-    StorageDB.save(key, feature)
+  public openMusicList() {
+    const modal = this.modal.open(MusicListComponent, { size: 'lg' });
+    modal.closed.subscribe((music: any)=> {
+      console.log("A", music)
+    });
   }
-
-  private readFeature() {
-    const key = Str.toSnakeCase(`${this.title} ${this.source}`);
-    const feature = StorageDB.read(key);
-    const { title, description, source, volume, currentTime, holded, repeated, timeStart, timeEnd } = feature;
-
-    this.title = title || this.title;
-    this.description = description || this.description;
-    this.source = source || this.source;
-    this.volume = volume || this.volume;
-    this.holded = holded || this.holded;
-    this.repeated = repeated || this.repeated;
-    this.timeStart = timeStart || this.timeStart;
-    this.timeEnd = timeEnd || this.timeEnd;
-
-    this.audio.src = this.source;
-    this.audio.volume = (this.volume / 100);
-    this.audio.currentTime = currentTime || this.audio.currentTime;
-  }
-
 
 }
-
-
-

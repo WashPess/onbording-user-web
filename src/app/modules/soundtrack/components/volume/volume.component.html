@@ -1,16 +1,23 @@
+<div class="volume-container">
 
+  <div class="knob-boundary">
 
-<div class="knob-boundary">
+    <div
+      cdkDrag
+      class="knob-box"
+      cdkDragLockAxis="y"
+      cdkDragBoundary=".knob-boundary"
+      [cdkDragFreeDragPosition]="dragPosition"
+      (cdkDragMoved)="knobChangesByDrag($event)"
+    >
+      <span class="fs-8">{{parseToInt(percent)}}%</span>
+    </div>
 
-  <div
-    cdkDrag
-    class="knob-box"
-    cdkDragLockAxis="y"
-    cdkDragBoundary=".knob-boundary"
-    [cdkDragFreeDragPosition]="dragPosition"
-    (cdkDragMoved)="knobChangesByDrag($event)"
-  >
-    <span>{{parseToInt(percent)}}%</span>
+  </div>
+
+  <div class="py-4">
+    <button ngbTooltip="Clear All" class="btn btn-secondary p-0 mt-0 py-2 w-100" (click)="clear()"><i class="bi bi-eraser"></i></button>
   </div>
 
 </div>
+

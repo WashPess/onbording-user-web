@@ -9,18 +9,19 @@
     <div class="col-11 p-4 d-flex flex-wrap gap-3 justify-content-evenly">
       <ng-container *ngFor="let music of catalog">
         <app-track
+          [reset]="cleared"
           [title]="music.title"
-          [description]="music.description"
+          [stop]="playersToggle"
           [source]="music.source"
           (playChange)="playToggle()"
+          [description]="music.description"
           (audioChange)="audioToggle($event)"
-          [stop]="playersToggle"
         ></app-track>
       </ng-container>
     </div>
 
     <div class="col-1 py-4">
-      <app-volume [audio]="audioCurrent"></app-volume>
+      <app-volume [audio]="audioCurrent" (clearAll)="clear()"></app-volume>
     </div>
 
   </div>

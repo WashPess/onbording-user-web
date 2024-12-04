@@ -5,13 +5,14 @@ import { SoundTrackComponent } from "./soundtrack.component";
 
 import { SharedModule } from "../shared/shared.module";
 
-import { TrackComponent, VolumeComponent } from "./components";
+import { MusicListComponent, TrackComponent, VolumeComponent } from "./components";
 import { DeckComponent } from "./pages";
 
 
 @NgModule({
   declarations: [
     SoundTrackComponent,
+    MusicListComponent,
     VolumeComponent,
     TrackComponent,
     DeckComponent,
@@ -22,6 +23,7 @@ import { DeckComponent } from "./pages";
   ],
   exports: [
     SoundTrackComponent,
+    MusicListComponent,
     VolumeComponent,
     TrackComponent,
   ],

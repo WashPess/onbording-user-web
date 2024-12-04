@@ -6,17 +6,19 @@
     <div class="tap-hold">
 
       <a class="form-check form-switch" (click)="$event.stopPropagation()">
-        <input #switchHold class="form-check-input" type="checkbox" id="hold" (change)="changeHold(switchHold.checked)">
+        <input #switchHold class="form-check-input" type="checkbox" id="hold" [checked]="holded" (change)="changeHold(switchHold.checked)">
       </a>
 
     </div>
 
-    <div class="mt-3 pt-2">
-      <i class="bi bi-cassette me-1" [ngbTooltip]="title"></i>
+    <a class="mt-3 pt-2 text-decoration-none" (click)="$event.stopPropagation();">
+      <a class="text-decoration-none" (click)="openMusicList()">
+        <i class="bi bi-cassette me-1" [ngbTooltip]="title"></i>
+      </a>
       <span>
         {{title | slice:0:36}}
       </span>
-    </div>
+    </a>
 
     <div class="">
       <ng-container *ngIf="paused">

@@ -1,29 +1,12 @@
-import { Component, OnInit } from "@angular/core";
-
+import { Component } from "@angular/core";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
-  selector: 'app-deck',
-  templateUrl: './deck.component.html',
-  styleUrls: ['./deck.component.scss']
+    selector: 'app-music-list',
+    templateUrl: './music-list.component.html'
 })
-export class DeckComponent implements OnInit {
-
-  public playersToggle= false;
-  public audioCurrent: HTMLAudioElement = new Audio();
-  public cleared = false;
-
-  public playToggle() {
-    this.playersToggle = !this.playersToggle
-  }
-
-  public audioToggle(audio: HTMLAudioElement) {
-    this.audioCurrent = audio;
-  }
-
-  public clear() {
-    this.cleared = !this.cleared;
-  }
+export class MusicListComponent {
 
   public catalog = [
     { title: "A Jornada Começa", description: 'WAi', source: '2.mp3'} ,
@@ -43,11 +26,18 @@ export class DeckComponent implements OnInit {
     { title: "A Queda do Herói", description: 'WAi', source: '3.mp3'} ,
   ]
 
+  constructor(
+    private readonly activeModal: NgbActiveModal,
+  ) {
 
-  ngOnInit(): void {
-      this.initDragAndDrop();
   }
 
-  public initDragAndDrop() {}
+  public dismiss() {
+    this.activeModal.dismiss();
+  }
+
+  public close() {
+    this.activeModal.close();
+  }
 
 }

@@ -1,5 +1,5 @@
 import { CdkDragMove } from "@angular/cdk/drag-drop";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 
 @Component({
@@ -21,8 +21,10 @@ export class VolumeComponent implements OnInit {
     this.changeKnobPositionByPercentage(this.percent);
   };
 
-  public volume: number = 1; // 0 - 1
-  public percent: number = 0; // 0 - 100
+  @Output() clearAll = new EventEmitter<boolean>()
+
+  public volume: number = 1;    // 0 - 1
+  public percent: number = 0;   // 0 - 100
 
   public audioCurrent: HTMLAudioElement = new Audio();
   public dragPosition = { x: 0, y: 0 };
@@ -32,6 +34,7 @@ export class VolumeComponent implements OnInit {
 
   private knobElement: HTMLElement = document.createElement('div');
   private knobClient: DOMRect = new DOMRect();
+  private cleared = false;
 
   ngOnInit(): void {
     this.getBoundaryElement();
@@ -145,6 +148,11 @@ export class VolumeComponent implements OnInit {
     const normalizeVolumeTolog = (Math.pow(volume, Math.sqrt(compressionRatio)) * 10) + offset;
     const percent = Math.log10(normalizeVolumeTolog) * 100;
     return this.normalizePercent(percent);
+  }
+
+  public clear() {
+    this.cleared = !this.cleared;
+    this.clearAll.emit(this.cleared);
   }
 
 }
